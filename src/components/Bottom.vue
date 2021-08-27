@@ -18,7 +18,7 @@ export default {
     name: "Bottom",
     data(){
         return {
-            active: 1
+            active: 0
         }
     },
     methods: {
@@ -44,8 +44,8 @@ export default {
         font-size: 20px;
     }
     .bottom /deep/ .van-tabbar.van-tabbar--fixed {
-        max-width: 720px;
-        margin: 0 auto;
-        left: auto;
+        max-width: 760px;
+        left: 50%;
+        transform: translateX(-50%);
     }
 </style>

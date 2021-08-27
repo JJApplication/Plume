@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-      <component :is="Comps"></component>
+      <!--      懒加载-->
+      <van-skeleton title avatar :row="6" :loading="loading">
+          <component :is="Comps"></component>
+      </van-skeleton>
       <Bottom></Bottom>
   </div>
 </template>
@@ -12,35 +15,41 @@ import About from "./views/About";
 import Container from "./views/Container";
 import Setting from "./views/Setting";
 export default {
-  name: 'app',
-  components: {
-      Bottom, Home, About, Container, Setting
-  },
-  data(){
-      return {
-          Comps: this.$store.state.comps
-      }
-  },
-  watch: {
-      "$store.state.comps": function () {
-          console.log(this.$store.state.comps);
-          this.Comps = this.$store.state.comps;
-      }
-  }
+    name: 'app',
+        components: {
+          Bottom, Home, About, Container, Setting
+        },
+    data(){
+        return {
+            Comps: this.$store.state.comps,
+            loading: true
+        }
+    },
+    watch: {
+        "$store.state.comps": function () {
+            console.log(this.$store.state.comps);
+            this.Comps = this.$store.state.comps;
+        }
+    },
+    mounted() {
+        setTimeout(() => {
+            this.loading = false;
+        }, 1000)
+    }
 }
 </script>
 
 <style>
 #app {
   height: calc(100% - 40px);
-  background-color: white;
+  background-color: #f7f8fa;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   padding: 20px 40px;
-  max-width: 720px;
+  max-width: 680px;
   margin: 0 auto;
 }
 * {
@@ -49,6 +58,6 @@ export default {
 }
 html, body {
     height: 100%;
-    background-color: #f5f5f5;
+    background-color: #fff;
 }
 </style>
