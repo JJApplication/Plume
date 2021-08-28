@@ -6,12 +6,8 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import './plugins/vant.js'
-import {initStore} from "./plugins/store";
 
 Vue.config.productionTip = false
-
-// 初始化store
-initStore();
 
 new Vue({
   router,

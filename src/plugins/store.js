@@ -5,9 +5,15 @@
 import consts from "../actions/consts";
 
 export function initStore() {
-    saveStore("app", consts.app)
-    saveStore("theme", consts.default_theme)
-    saveStore("comps", consts.comps)
+    initKey("app", consts.app)
+    initKey("theme", consts.default_theme)
+    initKey("comps", consts.comps)
+}
+
+function initKey(key, value) {
+    if (!localStorage.getItem(key)) {
+        saveStore(key, value)
+    }
 }
 
 // 从store中取值 不存在返会null

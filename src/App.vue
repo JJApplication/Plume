@@ -29,12 +29,14 @@ export default {
         "$store.state.comps": function () {
             console.log(this.$store.state.comps);
             this.Comps = this.$store.state.comps;
-        }
+        },
     },
     mounted() {
         setTimeout(() => {
             this.loading = false;
         }, 1000)
+        // 挂载时即监听主题变化
+        this.$store.commit('changeTheme', this.$store.state.theme);
     }
 }
 </script>
@@ -42,12 +44,11 @@ export default {
 <style>
 #app {
   height: calc(100% - 40px);
-  background-color: #f7f8fa;
+  background-color: var(--light-bg-container-color);
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   padding: 20px 40px;
   max-width: 680px;
   margin: 0 auto;
@@ -58,6 +59,7 @@ export default {
 }
 html, body {
     height: 100%;
-    background-color: #fff;
+    background-color: var(--light-bg-color, #222222);
+    color: var(--light-text-color, #ffffff);
 }
 </style>

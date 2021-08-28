@@ -1,0 +1,10 @@
+/*light theme*/
+:root {
+    --light-text-color: #202020;
+    --light-text-title-color: #404040;
+    --light-text-bold-color: #808080;
+    --light-text-active-color: #1989fa;
+    --light-bg-color: white;
+    --light-bg-container-color: #f7f8fa;
+    --light-bg-docker-color: #efefef;
+}

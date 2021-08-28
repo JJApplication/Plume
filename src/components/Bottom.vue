@@ -48,4 +48,16 @@ export default {
         left: 50%;
         transform: translateX(-50%);
     }
+    .bottom /deep/ .van-tabbar, .van-tabbar-item--active {
+        background-color: var(--light-bg-color, #2f2f2f);
+    }
+    .bottom /deep/ .van-tabbar-item {
+        color: var(--light-text-color, #a0a0a0);
+    }
+    .bottom /deep/ .van-tabbar-item--active {
+        color: var(--light-text-active-color, #ff4a9e);
+    }
+    .bottom /deep/ .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+        border-width: 0;
+    }
 </style>

@@ -18,6 +18,6 @@ export default {
     .header .header-title {
         font-size: 1.8rem;
         font-weight: bold;
-        color: #404040;
+        color: var(--light-text-title-color);
     }
 </style>

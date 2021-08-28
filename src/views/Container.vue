@@ -18,7 +18,7 @@ export default {
 <style scoped>
     .docker-top {
         padding: 10px;
-        background-color: #f5f5f5;
+        background-color: var(--light-bg-docker-color);
         border-radius: 4px;
         margin: 10px 0;
     }

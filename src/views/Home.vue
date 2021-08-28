@@ -5,10 +5,30 @@
       <div id="data-server-title">
           <p>Ubuntu 20.04LTS</p>
       </div>
-<!--    <img alt="Vue logo" src="../assets/logo.png">-->
-<!--    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
       <div class="cell">
           <p class="cell-title">负载</p>
+          <van-row gutter="20" justify="center" style="margin-top: .5rem">
+              <van-col span="6" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
+              <van-col span="6">
+                  <div>
+                      <span class="cell-head">系统</span><br>
+                      <span>0%</span>
+                  </div>
+              </van-col>
+              <van-col span="6">
+                  <div>
+                      <span class="cell-head">用户</span><br>
+                      <span>0%</span>
+                  </div>
+              </van-col>
+              <van-col span="6">
+                  <div>
+                      <span class="cell-head">IO等待</span><br>
+                      <span>0%</span>
+                  </div>
+              </van-col>
+          </van-row>
+          <van-progress :percentage="50" stroke-width="8" style="margin-top: .8rem;margin-bottom: .8rem" color="var(--light-text-active-color, #ff4a9e)"/>
       </div>
 
       <div class="cell">
@@ -27,17 +47,16 @@
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 import Header from "../components/Header";
 
 export default {
   name: 'Home',
   components: {
       Header,
-    HelloWorld
   },
     data() {
       return {
+          cpu_usage: 0
       }
     }
 }
@@ -51,17 +70,26 @@ export default {
     }
     #data-server-title p {
         font-size: .85rem;
-        color: #404040;
+        color: var(--light-text-title-color);
     }
     .cell {
         text-align: left;
-        background-color: white;
+        background-color: var(--light-bg-color, #2f2f2f);
         padding: 10px;
         border-radius: 10px;
         margin-bottom: 20px;
     }
     .cell .cell-title {
-        font-size: .9rem;
+        font-size: 1.2rem;
         font-weight: bold;
+        color: var(--light-text-color, #ffffff);
+    }
+    .cell .cell-head {
+        color: var(--light-text-bold-color);
+        font-weight: bold;
+        font-size: .9rem;
+    }
+    .cell-head.cell-head-cpu {
+        font-size: 1.6rem;
     }
 </style>
