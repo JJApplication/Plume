@@ -21,6 +21,12 @@
                     label="通信密钥"
                     placeholder="input key if you have"
                 />
+                <van-field
+                    v-model="api"
+                    name="api"
+                    label="API接口"
+                    placeholder="input plume api"
+                />
                 <van-field name="stepper" label="触发器(s)">
                     <template #input>
                         <van-stepper v-model="duration" />
@@ -33,7 +39,7 @@
                 </van-field>
                 <van-field name="switch" label="暂停监控">
                     <template #input>
-                        <van-switch v-model="watch" size="20" active-color="var(--light-text-active-color, #ff4a9e)" />
+                        <van-switch v-model="watchdog" size="20" active-color="var(--light-text-active-color, #ff4a9e)" />
                     </template>
                 </van-field>
                 <van-field name="switch" label="重置配置" @click="resetStore">
@@ -76,8 +82,8 @@ export default {
             key: this.$store.state.key,
             duration: this.$store.state.duration,
             limit: this.$store.state.limit,
-            watch: this.$store.state.watch,
-
+            watchdog: this.$store.state.watchdog,
+            api: this.$store.state.api
         }
     },
     computed: {
@@ -112,9 +118,13 @@ export default {
             console.log('limit changed', this.limit);
             this.$store.commit('changeLimit', this.limit);
         },
-        watch: function () {
-            console.log('state watch changed', this.watch);
-            this.$store.commit('changeWatch', this.watch);
+        watchdog: function () {
+            console.log('state watch changed', this.watchdog);
+            this.$store.commit('changeWatch', this.watchdog);
+        },
+        api: function () {
+            console.log('api changed', this.api);
+            this.$store.commit('changeApi', this.api);
         }
     },
     methods: {
@@ -138,6 +148,7 @@ export default {
             this.duration = this.$store.state.duration;
             this.limit = this.$store.state.limit;
             this.watch = this.$store.state.watch;
+            this.api = this.$store.state.api;
         },
         exportStore() {
           // 暂时仅做json转换显示
@@ -185,6 +196,11 @@ export default {
     }
     .setting /deep/ .van-button--mini {
         padding: 2px 8px;
+    }
+    @media (max-width: 480px) {
+        .setting /deep/ .van-cell-group--inset {
+            margin: 0;
+        }
     }
 </style>
 

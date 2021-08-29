@@ -230,7 +230,6 @@ export default {
     methods: {
       calcNetPercent() {
           this.network_percent =  (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
-          console.log(this.network_percent);
       }
     }
 }

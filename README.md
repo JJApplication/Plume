@@ -1,5 +1,7 @@
 # plume-app
 
+一个服务器可视化webapp
+
 ## Project setup
 ```
 npm install
@@ -15,5 +17,14 @@ npm run serve
 npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 示例
+
+![](demo/demo1.png)
+
+![](demo/demo2.png)
+
+![](demo/demo3.png)
+
+**同时支持暗黑模式切换**
+
+![](demo/demo4.png)

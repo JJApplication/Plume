@@ -12,6 +12,7 @@ export function initStore() {
     initKey("duration", consts.duration)
     initKey("limit", consts.limit)
     initKey("key", consts.key)
+    initKey("api", consts.api)
 }
 
 function initKey(key, value) {

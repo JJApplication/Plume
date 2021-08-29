@@ -3,9 +3,10 @@ const consts = {
     app: "plume",
     default_theme: "light",
     comps: "Home",
-    watch: true,
+    watch: false,
     duration: 10,
     limit: 80,
-    key: ''
+    key: '',
+    api: '/api'
 }
 export default consts;

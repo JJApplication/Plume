@@ -12,10 +12,11 @@ export default new Vuex.Store({
     app: getStore("app"),
     theme: getStore("theme"),
     comps: getStore("comps"),
-    watch: getStore("watch"),
+    watchdog: getStore("watch"),
     duration: getStore("duration"),
     limit: getStore("limit"),
-    key: getStore("key")
+    key: getStore("key"),
+    api: getStore("api")
   },
   mutations: {
     changeComps(state, comp) {
@@ -45,27 +46,33 @@ export default new Vuex.Store({
         limit = 0
       }
       saveStore("limit", limit);
-      this.limit = limit;
+      state.limit = limit;
     },
     changeWatch(state, watch) {
       saveStore("watch", watch);
-      this.watch = watch;
+      state.watchdog = watch;
+    },
+    changeApi(state, api) {
+      saveStore("api", api);
+      state.api = api;
     },
     clearAll(state) {
       state.app = null;
       state.theme = null;
-      state.watch = null;
+      state.watchdog = null;
       state.duration = null;
       state.limit = null;
       state.key = null;
+      state.api = null;
     },
     reloadAll(state) {
       state.app = getStore("app");
       state.theme = getStore("theme");
-      state.watch = getStore("watch");
+      state.watchdog = getStore("watch");
       state.duration = getStore("duration");
       state.limit = getStore("limit");
-      state.key = getStore("key")
+      state.key = getStore("key");
+      state.api = getStore("api");
     }
   },
   actions: {
