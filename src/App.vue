@@ -52,6 +52,14 @@ export default {
   padding: 20px 40px;
   max-width: 680px;
   margin: 0 auto;
+  overflow: hidden;
+  line-height: 1.2rem;
+}
+
+@media (max-width: 480px) {
+    #app {
+        padding: 20px;
+    }
 }
 * {
     padding: 0;
@@ -59,7 +67,20 @@ export default {
 }
 html, body {
     height: 100%;
-    background-color: var(--light-bg-color, #222222);
+    background-color: var(--light-bg-color, #101010);
     color: var(--light-text-color, #ffffff);
+}
+/*    隐藏滚动条*/
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
+    color: transparent;
+    width: 0;
+    height: 0;
+}
+::-webkit-scrollbar {
+    background-color: transparent;
+    color: transparent;
+    width: 0;
+    height: 0;
 }
 </style>

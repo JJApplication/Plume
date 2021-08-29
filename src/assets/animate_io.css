@@ -1,0 +1,12 @@
+/*io动画样式表*/
+@keyframes io {
+    0% {
+        background-color: #203d34;
+    }
+    50% {
+        background-color: #23fb1a;
+    }
+    100% {
+        background-color: #203d34;
+    }
+}

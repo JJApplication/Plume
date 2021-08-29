@@ -5,6 +5,9 @@
     --light-text-bold-color: #808080;
     --light-text-active-color: #1989fa;
     --light-bg-color: white;
-    --light-bg-container-color: #f7f8fa;
+    --light-bg-container-color: #f7f6f1;
     --light-bg-docker-color: #efefef;
+    --light-circle-color: #7fff00;
+    --light-circle-bg-color: #ebedf0;
+    --light-cell-title-color: #323233;
 }

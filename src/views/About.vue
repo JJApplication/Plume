@@ -11,7 +11,7 @@
         </van-cell-group>
 
         <div style="margin-top: 2rem">
-            <a style="font-size: 1.6rem;margin-bottom: 1rem;display: block;color: black" href="https://github.com/landers1037/plume">
+            <a style="font-size: 1.6rem;margin-bottom: 1rem;display: block;color: var(--light-text-color, #f0f0f0)" href="https://github.com/landers1037/plume">
                 <font-awesome-icon :icon="['fab', 'github']"></font-awesome-icon>
             </a>
             <van-rate
@@ -43,5 +43,14 @@ export default {
 <style scoped>
     .about {
         line-height: 2rem;
+    }
+    .about /deep/ .van-cell {
+        background-color: var(--light-bg-color, #2f2f2f);
+    }
+    .about /deep/ .van-cell .van-cell__title span{
+        color: var(--light-cell-title-color, #cfcfcf);
+    }
+    .about /deep/ .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+        border-width: 0;
     }
 </style>
