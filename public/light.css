@@ -5,9 +5,13 @@
     --light-text-bold-color: #808080;
     --light-text-active-color: #1989fa;
     --light-bg-color: white;
-    --light-bg-container-color: #f7f6f1;
-    --light-bg-docker-color: #efefef;
+    --light-bg-container-color: #f2f1f2;
+    --light-bg-docker-color: #e8e8e8;
     --light-circle-color: #7fff00;
     --light-circle-bg-color: #ebedf0;
     --light-cell-title-color: #323233;
+    --light-month-color: rgba(242,243,245,.8);
+    --light-step-bg-color: #f7f8fa;
+    --light-step-color: #323233;
+    --light-loading-color: #e0e1e2;
 }

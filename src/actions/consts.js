@@ -2,6 +2,10 @@
 const consts = {
     app: "plume",
     default_theme: "light",
-    comps: "Home"
+    comps: "Home",
+    watch: true,
+    duration: 10,
+    limit: 80,
+    key: ''
 }
 export default consts;

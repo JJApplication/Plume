@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <!--      懒加载-->
-      <van-skeleton title avatar :row="6" :loading="loading">
+      <van-skeleton title avatar :row="8" :loading="loading">
           <component :is="Comps"></component>
       </van-skeleton>
       <Bottom></Bottom>
@@ -53,7 +53,10 @@ export default {
   max-width: 680px;
   margin: 0 auto;
   overflow: hidden;
-  line-height: 1.2rem;
+  line-height: 1.4rem;
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
 }
 
 @media (max-width: 480px) {
@@ -83,4 +86,10 @@ html, body {
     width: 0;
     height: 0;
 }
+</style>
+
+<style scoped>
+    #app /deep/ .van-skeleton__row, #app /deep/ .van-skeleton__title, #app /deep/ .van-skeleton__avatar{
+        background-color: var(--light-loading-color, #e0e1e2);
+    }
 </style>

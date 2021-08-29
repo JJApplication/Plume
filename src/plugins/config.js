@@ -3,8 +3,8 @@ export function readConfig() {
 
 }
 
-export function exportConfig() {
-
+export function exportConfig(d) {
+    return d
 }
 
 export function changeConfig() {

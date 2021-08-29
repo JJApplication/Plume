@@ -43,6 +43,7 @@ export default {
 <style scoped>
     .about {
         line-height: 2rem;
+        padding: 8px 0;
     }
     .about /deep/ .van-cell {
         background-color: var(--light-bg-color, #2f2f2f);

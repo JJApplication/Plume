@@ -1,5 +1,5 @@
 <template>
-    <div style="overflow: auto;height: 100%">
+    <div class="scroll-body">
         <div class="home">
             <Header name="数据面板"></Header>
             <!--  服务器uname信息    -->
@@ -12,26 +12,26 @@
                     <van-col span="6" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
                     <van-col span="6">
                         <div>
-                            <span class="cell-head">系统</span><br>
-                            <span class="cell-data">0%</span>
+                            <span class="cell-head-cpu-pre cell-head-cpu-system"></span><span class="cell-head">系统</span><br>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
-                            <span class="cell-head">用户</span><br>
-                            <span class="cell-data">0%</span>
+                            <span class="cell-head-cpu-pre cell-head-cpu-user"></span><span class="cell-head">用户</span><br>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
-                            <span class="cell-head">IO等待</span><br>
-                            <span class="cell-data">0%</span>
+                            <span class="cell-head-cpu-pre cell-head-cpu-wait"></span><span class="cell-head">IO等待</span><br>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                 </van-row>
                 <van-progress :percentage="cpu_usage" stroke-width="8" style="margin-top: .8rem;margin-bottom: .8rem" color="var(--light-text-active-color, #ff4a9e)"/>
                 <br/>
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                <van-row gutter="20" justify="center" style="margin-top: .2rem">
                     <van-col span="6" class="cell-head">
                         <div>
                             <span class="cell-head">核心数</span><br>
@@ -41,13 +41,13 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">空闲</span><br>
-                            <span class="cell-data">0%</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">运行时间</span><br>
-                            <span class="cell-data">0Day</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">Day</span>
                         </div>
                     </van-col>
                     <van-col span="6">
@@ -66,19 +66,19 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">可用</span><br>
-                            <span>0%</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">已用</span><br>
-                            <span>0%</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">页面缓存</span><br>
-                            <span>0%</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -86,30 +86,30 @@
 
             <div class="cell">
                 <p class="cell-title">网络IO</p>
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                <van-row gutter="10" justify="center" style="margin-top: .5rem">
                     <van-col span="6">
                         <div>
                             <span class="cell-head">上传</span><br>
-                            <span class="cell-data">0 /s</span>
+                            <span class="cell-data">{{net_upload}} /s</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">下载</span><br>
-                            <span class="cell-data">0 /s</span>
+                            <span class="cell-data">{{net_download}} /s</span>
                         </div>
                     </van-col>
-                    <van-col span="6">
+                    <van-col span="8">
                         <div class="cell-data">
-                            <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>0</span><span>G</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
-                            <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>0</span><span>G</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
+                            <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span>G</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
+                            <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span>G</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
                         </div>
                     </van-col>
-                    <van-col span="6">
+                    <van-col span="4">
                         <div>
                             <van-circle
-                                    v-model="current_mem"
-                                    :rate="10" :speed="100"
+                                    v-model:current-rate="network_init"
+                                    :rate="network_percent" :speed="100"
                                     :stroke-width="160"
                                     size="50px"
                                     color="var(--light-circle-color, #7fff00)"
@@ -122,7 +122,7 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">重传率</span><br>
-                            <span class="cell-data">0%</span>
+                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
@@ -177,8 +177,8 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">速率</span><br>
-                            <span class="cell-data">0 B/s</span><br>
-                            <span class="cell-data">0 B/s</span>
+                            <span class="cell-data">0 MB/s</span><br>
+                            <span class="cell-data">0 MB/s</span>
                         </div>
                     </van-col>
                     <van-col span="6">
@@ -215,8 +215,22 @@ export default {
       return {
           cpu_usage: 0,
           mem_usage: 0,
-          current_mem: 20,
+          network_init: 0,
+          net_upload: '100m',
+          net_download: '100m',
+          network_upload: 100,
+          network_download: 100,
+          network_percent: 0,
           ip: '127.0.0.1'
+      }
+    },
+    mounted() {
+      this.calcNetPercent();
+    },
+    methods: {
+      calcNetPercent() {
+          this.network_percent =  (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
+          console.log(this.network_percent);
       }
     }
 }
@@ -227,6 +241,20 @@ export default {
         overflow-y: auto;
         padding-bottom: 40px;
         padding-top: 8px;
+    }
+    .scroll-body {
+        overflow: auto;
+        height: 100%
+    }
+    .scroll-body::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
+    }
+    .home::-webkit-scrollbar {
+        display: none;
+        width: 0;
+        height: 0;
     }
     #data-server-title {
         text-align: left;
@@ -257,6 +285,23 @@ export default {
     .cell .cell-data {
         color: var(--light-text-color, #fff);
         font-size: .9rem;
+        font-weight: bold;
+    }
+    .cell .cell-head-cpu-pre {
+        height: 10px;
+        width: 4px;
+        display: inline-block;
+        border-radius: 4px;
+        margin-right: 4px
+    }
+    .cell .cell-head-cpu-system {
+        background-color: #ff0000;
+    }
+    .cell .cell-head-cpu-user {
+        background-color: #7fff00;
+    }
+    .cell .cell-head-cpu-wait {
+        background-color: #9370db;
     }
     .cell-head.cell-head-cpu {
         font-size: 1.6rem;
