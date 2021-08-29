@@ -4,7 +4,7 @@
             <Header name="数据面板"></Header>
             <!--  服务器uname信息    -->
             <div id="data-server-title">
-                <p>Ubuntu 20.04LTS</p>
+                <p>{{server}}</p>
             </div>
             <div class="cell">
                 <p class="cell-title">负载</p>
@@ -215,6 +215,8 @@ export default {
     data() {
       return {
           global_timer: null,
+
+          server: 'Ubuntu 20.04LTS',
           cpu_usage: 0,
           cpu_usage_system: 0,
           cpu_usage_user: 0,
@@ -267,6 +269,7 @@ export default {
     mounted() {
       this.global_timer = setInterval(() => {
           if (this.$store.state.comps === 'Home' && this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false) {
+              this.getServerData();
               this.getCPUdata();
               this.getMemData();
               this.getNetData();
@@ -276,6 +279,11 @@ export default {
               this.calcBar();
           }
       }, parseInt(this.$store.state.duration, 10) * 1000)
+    },
+    beforeDestroy() {
+      if (this.global_timer) {
+          clearInterval(this.global_timer);
+      }
     },
     methods: {
       calcNetPercent() {
@@ -295,6 +303,16 @@ export default {
       // 告警提示
       notifyDanger(message) {
           this.$notify({ type: 'danger', message: message });
+      },
+      // 服务器信息
+      getServerData() {
+          this.$axios.post(apis.api_server)
+          .then(res => {
+              this.server = res.data.data ? res.data.data : 'Unrecognizable server type';
+          }).catch(()=>{
+              this.notifyDanger("接口" + apis.api_server + "请求失败");
+              this.server = 'Unrecognizable server type';
+          })
       },
       // 获取cpu信息
       getCPUdata() {

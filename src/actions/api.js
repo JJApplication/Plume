@@ -1,4 +1,5 @@
 const apis = {
+    api_server: '/server',
     api_cpu: '/cpu',
     api_mem: '/mem',
     api_net: '/net',
