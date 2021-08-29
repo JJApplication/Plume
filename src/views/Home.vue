@@ -159,9 +159,9 @@
                     </van-col>
                     <van-col span="12">
                         <div>
-                            <span class="cell-head">20G</span>
-                            <span>/30G</span>
-                            <div class="data-bar"><span></span></div>
+                            <span class="cell-head">{{disk_used}}G</span>
+                            <span class="cell-head">/{{disk_all}}G</span>
+                            <div class="data-bar" id="data-bar"><span id="data-bar-inner"></span></div>
                         </div>
                     </van-col>
                 </van-row>
@@ -221,15 +221,26 @@ export default {
           network_upload: 100,
           network_download: 100,
           network_percent: 0,
-          ip: '127.0.0.1'
+          ip: '127.0.0.1',
+          disk_used: 10,
+          disk_all: 20
       }
     },
     mounted() {
       this.calcNetPercent();
+      this.calcBar();
     },
     methods: {
       calcNetPercent() {
           this.network_percent =  (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
+      },
+      calcBar() {
+          let bar = document.getElementById("data-bar-inner");
+          let height = (this.disk_used / this.disk_all * 100).toFixed(0);
+          if (height >= 100) {
+              bar.style.borderRadius = '6px';
+          }
+          bar.style.height = height + '%';
       }
     }
 }
@@ -317,15 +328,16 @@ export default {
         border-radius: 6px;
         margin-left: 8px;
     }
-    .data-bar span {
+    .data-bar #data-bar-inner {
         background-color: #1989fa;
-        height: 10%;
+        height: 0;
         width: 24px;
         display: inline-block;
         position: absolute;
         bottom: 0;
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
+        transition: height .3s ease;
     }
     .cell-head.cell-io {
         height: 10px;
@@ -337,5 +349,8 @@ export default {
         animation-iteration-count: infinite;
         animation-timing-function: ease;
         animation-duration: 2s;
+    }
+    .cell /deep/ .van-divider {
+        border-color: var(--light-line-border-color, #707070);
     }
 </style>

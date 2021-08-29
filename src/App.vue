@@ -14,10 +14,11 @@ import Home from "./views/Home";
 import About from "./views/About";
 import Container from "./views/Container";
 import Setting from "./views/Setting";
+import Detail from "./views/Detail";
 export default {
     name: 'app',
         components: {
-          Bottom, Home, About, Container, Setting
+          Bottom, Home, About, Container, Setting, Detail
         },
     data(){
         return {

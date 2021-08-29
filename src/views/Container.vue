@@ -10,21 +10,24 @@
             text="Docker容器展示基于Docker API"
         />
         <div class="scroll">
-            <div class="container-list">
-                <div class="container-body" v-for="c in containers" :key="c.name">
-                    <p class="container-title">{{c.name}}</p>
-                    <van-row justify="space-between" class="container-info">
-                        <van-col span="9"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
-                        <van-col span="6"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
-                        <van-col span="6"><span style="font-weight: bold">端口</span><br><span class="container-info-data">{{c.port}}</span></van-col>
-                        <van-col span="3"><span style="font-weight: bold">状态</span><br>
-                            <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'stop'"/>
-                            <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exit'"/>
-                            <font-awesome-icon icon="play" style="color: forestgreen" v-if="c.status !== 'stop' && c.status !== 'exit'"/>
-                        </van-col>
-                    </van-row>
+            <van-skeleton title :row="6" :loading="!visible" style="margin-top: 2rem"/>
+            <transition name="van-slide-down">
+                <div v-show="visible" class="container-list">
+                    <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
+                        <p class="container-title">{{c.name}}</p>
+                        <van-row justify="space-between" class="container-info">
+                            <van-col span="9"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
+                            <van-col span="6"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
+                            <van-col span="6"><span style="font-weight: bold">端口</span><br><span class="container-info-data">{{c.port}}</span></van-col>
+                            <van-col span="3"><span style="font-weight: bold">状态</span><br>
+                                <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'stop'"/>
+                                <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exit'"/>
+                                <font-awesome-icon icon="play" style="color: forestgreen" v-if="c.status !== 'stop' && c.status !== 'exit'"/>
+                            </van-col>
+                        </van-row>
+                    </div>
                 </div>
-            </div>
+            </transition>
         </div>
 
     </div>
@@ -37,8 +40,10 @@ export default {
     components: {Header},
     data() {
         return {
+            visible: false,
             containers: [
                 {
+                    id: '0',
                     name: 'plume',
                     image: 'landers1037/plume',
                     date: '2021-01-01',
@@ -46,6 +51,7 @@ export default {
                     status: 'exit'
                 },
                 {
+                    id: '1',
                     name: 'plume',
                     image: 'landers1037/plume',
                     date: '2021-01-01',
@@ -53,6 +59,7 @@ export default {
                     status: 'stop'
                 },
                 {
+                    id: '2',
                     name: 'plume',
                     image: 'landers1037/plume',
                     date: '2021-01-01',
@@ -60,6 +67,17 @@ export default {
                     status: 'start'
                 }
             ]
+        }
+    },
+    mounted() {
+      setTimeout(() => {
+          this.visible = true
+      }, 1000)
+    },
+    methods: {
+        showDetail(id) {
+            this.$store.commit('changeID', id);
+            this.$store.commit('changeComps', 'Detail');
         }
     }
 }
@@ -92,6 +110,7 @@ export default {
         overflow-y: auto;
     }
     .container .container-body {
+        cursor: pointer;
         background-color: var(--light-bg-docker-color, #2f2f2f);
         padding: 10px;
         border-radius: 8px;

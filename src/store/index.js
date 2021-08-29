@@ -16,7 +16,9 @@ export default new Vuex.Store({
     duration: getStore("duration"),
     limit: getStore("limit"),
     key: getStore("key"),
-    api: getStore("api")
+    api: getStore("api"),
+    // 容器id无需持久化
+    container_id: ''
   },
   mutations: {
     changeComps(state, comp) {
@@ -55,6 +57,9 @@ export default new Vuex.Store({
     changeApi(state, api) {
       saveStore("api", api);
       state.api = api;
+    },
+    changeID(state, id) {
+      state.container_id = id;
     },
     clearAll(state) {
       state.app = null;

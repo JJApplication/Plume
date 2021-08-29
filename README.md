@@ -2,6 +2,8 @@
 
 一个服务器可视化webapp
 
+模仿ios应用 [serverCat](https://servercat.app/)编写
+
 ## Project setup
 ```
 npm install
