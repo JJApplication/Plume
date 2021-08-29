@@ -60,7 +60,14 @@ export default {
     .bottom /deep/ .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
         border-width: 0;
     }
+
     .bottom /deep/ .van-tabbar.van-tabbar--fixed {
         padding-bottom: 10px;
+    }
+    /*针对移动端设备*/
+    @media (max-width: 480px) {
+        .bottom /deep/ .van-tabbar.van-tabbar--fixed {
+            padding-bottom: 20px;
+        }
     }
 </style>

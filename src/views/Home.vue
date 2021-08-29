@@ -13,19 +13,19 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head-cpu-pre cell-head-cpu-system"></span><span class="cell-head">系统</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-data">{{cpu_usage_system}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head-cpu-pre cell-head-cpu-user"></span><span class="cell-head">用户</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-data">{{cpu_usage_user}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head-cpu-pre cell-head-cpu-wait"></span><span class="cell-head">IO等待</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-data">{{cpu_io_wait}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -35,25 +35,25 @@
                     <van-col span="6" class="cell-head">
                         <div>
                             <span class="cell-head">核心数</span><br>
-                            <span class="cell-data">2</span>
+                            <span class="cell-data">{{cpu_count}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">空闲</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-data">{{cpu_free}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">运行时间</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">Day</span>
+                            <span class="cell-data">{{cpu_run}}</span><span style="margin-left: 2px;font-size: .9rem">Day</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">平均负载</span><br>
-                            <span class="cell-data">0</span>
+                            <span class="cell-data">{{cpu_load}}</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -66,19 +66,19 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">可用</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_free}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">已用</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_used}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">页面缓存</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_cache}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -122,25 +122,25 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">重传率</span><br>
-                            <span class="cell-data">0</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-data">{{net_retry}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">主动建连</span><br>
-                            <span class="cell-data">0</span>
+                            <span class="cell-data">{{net_active}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">被动建连</span><br>
-                            <span class="cell-data">0</span>
+                            <span class="cell-data">{{net_passive}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">建连失败</span><br>
-                            <span class="cell-data">0</span>
+                            <span class="cell-data">{{net_fail}}</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -154,7 +154,7 @@
                     <van-col span="12">
                         <div>
                             <span class="cell-head" style="font-weight: bold">/</span><br>
-                            <span class="cell-data">/dev/vda1</span>
+                            <span class="cell-data">{{ disk_mount }}</span>
                         </div>
                     </van-col>
                     <van-col span="12">
@@ -177,22 +177,22 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">速率</span><br>
-                            <span class="cell-data">0 MB/s</span><br>
-                            <span class="cell-data">0 MB/s</span>
+                            <span class="cell-data">{{disk_read_rate}} MB/s</span><br>
+                            <span class="cell-data">{{disk_write_rate}} MB/s</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">字节</span><br>
-                            <span class="cell-data">0 B</span><br>
-                            <span class="cell-data">0 B</span>
+                            <span class="cell-data">{{disk_read_byte}} B</span><br>
+                            <span class="cell-data">{{disk_write_byte}} B</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">延迟</span><br>
-                            <span class="cell-data">0</span><br>
-                            <span class="cell-data">0</span>
+                            <span class="cell-data">{{disk_read_delay}}</span><br>
+                            <span class="cell-data">{{disk_write_delay}}</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -205,6 +205,7 @@
 // @ is an alias to /src
 import Header from "../components/Header";
 import "@/assets/animate_io.css";
+import apis from "../actions/api";
 
 export default {
   name: 'Home',
@@ -213,34 +214,150 @@ export default {
   },
     data() {
       return {
+          global_timer: null,
           cpu_usage: 0,
+          cpu_usage_system: 0,
+          cpu_usage_user: 0,
+          cpu_io_wait: 0,
+          cpu_count: 2,
+          cpu_free: 0,
+          cpu_run: 0,
+          cpu_load: '0,0,0',
+
           mem_usage: 0,
+          mem_free: 0,
+          mem_used: 0,
+          mem_cache: 0,
+
           network_init: 0,
           net_upload: '100m',
           net_download: '100m',
           network_upload: 100,
           network_download: 100,
           network_percent: 0,
+          net_retry: 0,
+          net_active: 0,
+          net_passive: 0,
+          net_fail: 0,
           ip: '127.0.0.1',
+
+          disk_mount: '/dev/vda1',
           disk_used: 10,
-          disk_all: 20
+          disk_all: 20,
+          disk_read_rate: 0,
+          disk_write_rate: 0,
+          disk_read_byte: 0,
+          disk_write_byte: 0,
+          disk_read_delay: 0,
+          disk_write_delay: 0
       }
     },
+    watch: {
+        cpu_usage: function () {
+            if (this.cpu_usage >= this.$store.state.limit) {
+                this.notifyDanger("cpu使用量超出限制" + this.$store.state.limit + "%")
+            }
+        },
+        mem_usage: function () {
+            if (this.mem_usage >= this.$store.state.limit) {
+                this.notifyDanger("内存使用量超出限制" + this.$store.state.limit + "%")
+            }
+        }
+    },
     mounted() {
-      this.calcNetPercent();
-      this.calcBar();
+      this.global_timer = setInterval(() => {
+          if (this.$store.state.comps === 'Home' && this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false) {
+              this.getCPUdata();
+              this.getMemData();
+              this.getNetData();
+              this.getDiskData();
+          }else {
+              this.calcNetPercent();
+              this.calcBar();
+          }
+      }, parseInt(this.$store.state.duration, 10) * 1000)
     },
     methods: {
       calcNetPercent() {
-          this.network_percent =  (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
+          this.network_percent = (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
+          return (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
       },
       calcBar() {
           let bar = document.getElementById("data-bar-inner");
-          let height = (this.disk_used / this.disk_all * 100).toFixed(0);
-          if (height >= 100) {
-              bar.style.borderRadius = '6px';
+          if (bar) {
+              let height = (this.disk_used / this.disk_all * 100).toFixed(0);
+              if (height >= 100) {
+                  bar.style.borderRadius = '6px';
+              }
+              bar.style.height = height + '%';
           }
-          bar.style.height = height + '%';
+      },
+      // 告警提示
+      notifyDanger(message) {
+          this.$notify({ type: 'danger', message: message });
+      },
+      // 获取cpu信息
+      getCPUdata() {
+        this.$axios.post(apis.api_cpu)
+        .then(res => {
+            let data = res.data.data;
+            this.cpu_usage = data.cpu_usage;
+            this.cpu_usage_system = data.cpu_usage_system;
+            this.cpu_usage_user = data.cpu_usage_user;
+            this.cpu_io_wait = data.cpu_io_wait;
+            this.cpu_count = data.cpu_count;
+            this.cpu_free = data.cpu_free;
+            this.cpu_load = data.cpu_load;
+        }).catch(() => {
+            this.notifyDanger("接口" + apis.api_cpu + "请求失败");
+        });
+      },
+      // 获取内存信息
+      getMemData() {
+          this.$axios.post(apis.api_mem)
+              .then(res => {
+                  let data = res.data.data;
+                  this.mem_usage = data.mem_usage;
+                  this.mem_free = data.mem_free;
+                  this.mem_used = data.mem_used;
+                  this.mem_cache = data.mem_cache;
+              }).catch(() => {
+              this.notifyDanger("接口" + apis.api_mem + "请求失败");
+          });
+      },
+      getNetData() {
+          this.$axios.post(apis.api_net)
+              .then(res => {
+                  let data = res.data.data;
+                  this.net_upload = data.net_upload;
+                  this.net_download = data.network_download;
+                  this.network_upload = data.network_upload;
+                  this.network_download = data.network_download;
+                  this.network_percent = this.calcNetPercent();
+                  this.net_retry = data.net_retry;
+                  this.net_active = data.net_active;
+                  this.net_passive = data.net_passive;
+                  this.net_fail = data.net_fail;
+              }).catch(() => {
+              this.notifyDanger("接口" + apis.api_net + "请求失败");
+          });
+      },
+      getDiskData() {
+          this.$axios.post(apis.api_disk)
+              .then(res => {
+                  let data = res.data.data;
+                  this.disk_mount = data.disk_mount;
+                  this.disk_used = data.disk_used;
+                  this.disk_all = data.disk_all;
+                  this.disk_read_rate = data.disk_read_rate;
+                  this.disk_write_rate = data.disk_write_rate;
+                  this.disk_read_byte = data.disk_read_byte;
+                  this.disk_write_byte = data.disk_write_byte;
+                  this.disk_read_delay = data.disk_read_delay;
+                  this.disk_write_delay = data.disk_write_delay;
+              }).catch(() => {
+              this.notifyDanger("接口" + apis.api_disk + "请求失败");
+          });
       }
     }
 }

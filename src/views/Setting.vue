@@ -83,7 +83,7 @@ export default {
             key: this.$store.state.key,
             duration: this.$store.state.duration,
             limit: this.$store.state.limit,
-            watchdog: this.$store.state.watchdog,
+            watchdog: this.$store.state.watchdog === 'true',
             api: this.$store.state.api
         }
     },

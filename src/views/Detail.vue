@@ -13,7 +13,7 @@
                         <font-awesome-icon icon="globe-americas"/>
                     </template>
                     <template #label>
-                        <span>{{ name }}</span>
+                        <span>{{ name ? name : 'none' }}</span>
                     </template>
                 </van-cell>
                 <van-cell title="命令">
@@ -37,7 +37,7 @@
                         <font-awesome-icon icon="user-tie"/>
                     </template>
                     <template #label>
-                        <span>{{ user }}</span>
+                        <span>{{ user ? user : 'unknown' }}</span>
                     </template>
                 </van-cell>
                 <van-cell title="挂载卷">
@@ -48,12 +48,20 @@
                         <span>{{ volume }}</span>
                     </template>
                 </van-cell>
+                <van-cell title="暴露端口">
+                    <template #extra>
+                        <font-awesome-icon icon="external-link-square-alt"/>
+                    </template>
+                    <template #label>
+                        <span>{{ port }}</span>
+                    </template>
+                </van-cell>
                 <van-cell title="工作路径">
                     <template #extra>
                         <font-awesome-icon icon="wave-square"/>
                     </template>
                     <template #label>
-                        <span>{{ wrkdir }}</span>
+                        <span>{{ wrkdir ? wrkdir : 'no workdir' }}</span>
                     </template>
                 </van-cell>
                 <van-cell title="创建时间">
@@ -69,7 +77,7 @@
                         <font-awesome-icon icon="eye"/>
                     </template>
                     <template #label>
-                        <span>{{ status }}</span>
+                        <span>{{ status ? status : 'unknown' }}</span>
                     </template>
                 </van-cell>
                 <van-cell title="CPU占用">
@@ -96,6 +104,7 @@
 <script>
 // 容器的详细信息
 import Header from "../components/Header";
+import apis from "../actions/api";
 export default {
     name: "Detail",
     components: {Header},
@@ -103,22 +112,27 @@ export default {
         return {
             visible: false,
             id: this.$store.state.container_id !== null ? this.$store.state.container_id : 'unknown',
-            name: 'none',
+            name: '',
             cmd: ['/bin/bash'],
             image: 'landers1037/plume',
-            user: 'root',
+            user: '',
             volume: ['/dev'],
-            wrkdir: '/root',
+            port: [],
+            wrkdir: '',
             date: '2021-01-01',
-            status: 'running',
+            status: '',
             cpu: 0,
             mem: 0
         }
     },
     mounted() {
-      setTimeout(() => {
-          this.visible = true
-      }, 1000)
+        if (this.$store.state.watchdog === 'false') {
+            this.getContainerInfo()
+        }else {
+            setTimeout(() => {
+                this.visible = true
+            }, 1000)
+        }
     },
     beforeDestroy() {
         this.$store.commit('changeID', null);
@@ -126,6 +140,31 @@ export default {
     methods: {
         back() {
             this.$store.commit('changeComps', 'Container');
+        },
+        // 告警提示
+        notifyDanger(message) {
+            this.$notify({ type: 'danger', message: message });
+        },
+        getContainerInfo() {
+            this.$axios.post(apis.api_container + "?id=" + this.id)
+            .then(res => {
+                let data = res.data.data;
+                this.name = data.name;
+                this.cmd = data.cmd;
+                this.image = data.image;
+                this.user = data.user;
+                this.volume = data.volume;
+                this.port = data.port;
+                this.wrkdir = data.wrkdir;
+                this.date = data.date;
+                this.status = data.status;
+                this.cpu = data.cpu;
+                this.mem = data.mem;
+
+                this.visible = true;
+            }).catch(()=>{
+               this.notifyDanger("获取容器信息失败");
+            });
         }
     }
 }
