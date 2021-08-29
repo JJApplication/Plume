@@ -2,6 +2,7 @@
 const consts = {
     app: "plume",
     default_theme: "light",
+    theme_url: "/light.css",
     comps: "Home",
     watch: false,
     duration: 10,

@@ -28,7 +28,6 @@ export default {
     },
     watch: {
         "$store.state.comps": function () {
-            console.log(this.$store.state.comps);
             this.Comps = this.$store.state.comps;
         },
     },
@@ -91,6 +90,6 @@ html, body {
 
 <style scoped>
     #app /deep/ .van-skeleton__row, #app /deep/ .van-skeleton__title, #app /deep/ .van-skeleton__avatar{
-        background-color: var(--light-loading-color, #e0e1e2);
+        background-color: var(--light-loading-color, #252525);
     }
 </style>

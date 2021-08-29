@@ -10,7 +10,7 @@
             <van-cell-group v-show="visible" inset>
                 <van-cell title="名称">
                     <template #extra>
-                        <font-awesome-icon icon="globe-americas"/>
+                        <font-awesome-icon icon="globe-americas" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ name ? name : 'none' }}</span>
@@ -18,7 +18,7 @@
                 </van-cell>
                 <van-cell title="命令">
                     <template #extra>
-                        <font-awesome-icon icon="terminal"/>
+                        <font-awesome-icon icon="terminal" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ cmd }}</span>
@@ -26,7 +26,7 @@
                 </van-cell>
                 <van-cell title="镜像">
                     <template #extra>
-                        <font-awesome-icon icon="cloud"/>
+                        <font-awesome-icon icon="cloud" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ image }}</span>
@@ -34,7 +34,7 @@
                 </van-cell>
                 <van-cell title="用户">
                     <template #extra>
-                        <font-awesome-icon icon="user-tie"/>
+                        <font-awesome-icon icon="user-tie" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ user ? user : 'unknown' }}</span>
@@ -42,7 +42,7 @@
                 </van-cell>
                 <van-cell title="挂载卷">
                     <template #extra>
-                        <font-awesome-icon icon="database"/>
+                        <font-awesome-icon icon="database" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ volume }}</span>
@@ -50,7 +50,7 @@
                 </van-cell>
                 <van-cell title="暴露端口">
                     <template #extra>
-                        <font-awesome-icon icon="external-link-square-alt"/>
+                        <font-awesome-icon icon="external-link-square-alt" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ port }}</span>
@@ -58,7 +58,7 @@
                 </van-cell>
                 <van-cell title="工作路径">
                     <template #extra>
-                        <font-awesome-icon icon="wave-square"/>
+                        <font-awesome-icon icon="wave-square" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ wrkdir ? wrkdir : 'no workdir' }}</span>
@@ -66,7 +66,7 @@
                 </van-cell>
                 <van-cell title="创建时间">
                     <template #extra>
-                        <font-awesome-icon icon="calendar-alt"/>
+                        <font-awesome-icon icon="calendar-alt" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ date }}</span>
@@ -74,7 +74,7 @@
                 </van-cell>
                 <van-cell title="运行状态">
                     <template #extra>
-                        <font-awesome-icon icon="eye"/>
+                        <font-awesome-icon icon="eye" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ status ? status : 'unknown' }}</span>
@@ -82,7 +82,7 @@
                 </van-cell>
                 <van-cell title="CPU占用">
                     <template #extra>
-                        <font-awesome-icon icon="microchip"/>
+                        <font-awesome-icon icon="microchip" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ cpu }} %</span>
@@ -90,7 +90,7 @@
                 </van-cell>
                 <van-cell title="内存占用">
                     <template #extra>
-                        <font-awesome-icon icon="memory"/>
+                        <font-awesome-icon icon="memory" style="font-size: 1.2rem"/>
                     </template>
                     <template #label>
                         <span>{{ mem }}</span>
@@ -126,7 +126,7 @@ export default {
         }
     },
     mounted() {
-        if (this.$store.state.watchdog === 'false') {
+        if (this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false) {
             this.getContainerInfo()
         }else {
             setTimeout(() => {
@@ -222,5 +222,8 @@ export default {
     }
     .detail /deep/ .van-cell::after {
         border-bottom-color: var(--light-line-border-color, #707070);
+    }
+    .detail /deep/ .van-skeleton__row, .detail /deep/ .van-skeleton__title, .detail /deep/ .van-skeleton__avatar{
+        background-color: var(--light-loading-color, #252525);
     }
 </style>

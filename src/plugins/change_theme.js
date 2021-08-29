@@ -1,6 +1,7 @@
 // 根据css root方式加载新的主题样式
 // 在light和dark之间切换 只需要取否
 import {getStore, saveStore} from "./store";
+import consts from "../actions/consts";
 
 export function change_theme(current_theme) {
     switch (current_theme) {
@@ -16,7 +17,18 @@ export function change_theme(current_theme) {
                         l.setAttribute("href", url);
                     }
                 }
+            } else {
+                // 不存在url时需要直接使用默认值
+                url = consts.theme_url;
+                let links = document.head.getElementsByTagName("link");
+                for (let l of links) {
+                    let id = l.getAttribute("id");
+                    if (id && id === 'theme-style') {
+                        l.setAttribute("href", url);
+                    }
+                }
             }
+
             saveStore("theme", 'light');
             break;
         }

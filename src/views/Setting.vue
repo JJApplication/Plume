@@ -83,7 +83,7 @@ export default {
             key: this.$store.state.key,
             duration: this.$store.state.duration,
             limit: this.$store.state.limit,
-            watchdog: this.$store.state.watchdog === 'true',
+            watchdog: this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true,
             api: this.$store.state.api
         }
     },
@@ -92,6 +92,15 @@ export default {
             // return this.theme === 'light';
             return false
         }
+    },
+    mounted() {
+        this.theme = this.$store.state.theme === 'dark';
+        this.app = this.$store.state.app;
+        this.key = this.$store.state.key;
+        this.duration = this.$store.state.duration;
+        this.limit = this.$store.state.limit;
+        this.watchdog = this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true;
+        this.api = this.$store.state.api;
     },
     watch: {
         theme: function () {

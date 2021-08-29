@@ -54,4 +54,7 @@ export default {
     .about /deep/ .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
         border-width: 0;
     }
+    .about /deep/ .van-cell-group {
+        background-color: transparent;
+    }
 </style>

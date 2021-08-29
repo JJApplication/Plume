@@ -16,9 +16,8 @@
                     <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
                         <p class="container-title">{{c.name}}</p>
                         <van-row justify="space-between" class="container-info">
-                            <van-col span="10"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
+                            <van-col span="15"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
                             <van-col span="6"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
-                            <van-col span="5"><span style="font-weight: bold">端口</span><br><span class="container-info-data">{{c.port}}</span></van-col>
                             <van-col span="3" align="center"><span style="font-weight: bold">状态</span><br>
                                 <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'stop'"/>
                                 <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exit'"/>
@@ -47,31 +46,28 @@ export default {
                     id: '0',
                     name: 'plume',
                     image: 'landers1037/plume',
-                    date: '2021-01-01',
-                    port: '',
+                    date: '2021-01-01 12:00',
                     status: 'exit'
                 },
                 {
                     id: '1',
                     name: 'plume',
                     image: 'landers1037/plume',
-                    date: '2021-01-01',
-                    port: [80],
+                    date: '2021-01-01 12:00',
                     status: 'stop'
                 },
                 {
                     id: '2',
                     name: 'plume',
                     image: 'landers1037/plume',
-                    date: '2021-01-01',
-                    port: [80, 8080],
+                    date: '2021-01-01 12:00',
                     status: 'start'
                 }
             ]
         }
     },
     mounted() {
-        if (this.$store.state.watchdog === 'false') {
+        if (this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false) {
             this.getContainers()
         }else {
             setTimeout(() => {
@@ -147,5 +143,8 @@ export default {
         color: var(--light-text-bold-color, #7d7d7d);
         word-break: break-all;
         word-wrap: break-word;
+    }
+    .container /deep/ .van-skeleton__row, .container /deep/ .van-skeleton__title, .container /deep/ .van-skeleton__avatar{
+        background-color: var(--light-loading-color, #252525);
     }
 </style>
