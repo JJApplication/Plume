@@ -290,8 +290,26 @@ export default {
     },
     methods: {
       calcNetPercent() {
-          this.network_percent = (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
-          return (this.network_download / (this.network_download + this.network_upload) * 100).toFixed(0);
+          // 根据流量计算 换算规则G = 1024 * 1024 M=1024 K=1
+          let download = 0;
+          let upload = 0;
+          if (this.network_upload.indexOf("G")) {
+              upload = this.network_upload.replace("G", "") * 1024 * 1024;
+          } else if (this.network_upload.indexOf("M")) {
+              upload = this.network_upload.replace("M", "") * 1024;
+          } else if (this.network_upload.indexOf("K")) {
+              upload = this.network_upload.replace("K", "");
+          }
+
+          if (this.network_download.indexOf("G")) {
+              download = this.network_download.replace("G", "") * 1024 * 1024;
+          } else if (this.network_download.indexOf("M")) {
+              download = this.network_download.replace("M", "") * 1024;
+          } else if (this.network_download.indexOf("K")) {
+              download = this.network_download.replace("K", "");
+          }
+          this.network_percent = (download / (download + upload) * 100).toFixed(0);
+          return (download / (download + upload) * 100).toFixed(0);
       },
       calcBar() {
           let bar = document.getElementById("data-bar-inner");
@@ -467,7 +485,7 @@ export default {
         height: 40px;
         width: 24px;
         display: inline-block;
-        background-color: var(--light-bg-container-color, #1f1f1f);
+        background-color: var(--light-bg-container-color, #1a1a1a);
         position: relative;
         border-radius: 6px;
         margin-left: 8px;

@@ -47,7 +47,7 @@ export function change_theme(current_theme) {
             break;
         }
         default: {
-            console.log(current_theme)
+            console.log(current_theme);
             break;
         }
     }
