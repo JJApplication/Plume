@@ -168,14 +168,14 @@
                 </van-row>
                 <van-divider />
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="6">
+                    <van-col span="4">
                         <div>
                             <span class="cell-head cell-io"></span><br>
                             <span class="cell-data">读</span><br>
                             <span class="cell-data">写</span>
                         </div>
                     </van-col>
-                    <van-col span="6">
+                    <van-col span="8">
                         <div>
                             <span class="cell-head">速率</span><br>
                             <span class="cell-data">{{disk_read_rate}}</span><br>

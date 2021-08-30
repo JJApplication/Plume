@@ -233,7 +233,7 @@ func getMemInfo() MemInfo {
 	total, _ := strconv.Atoi(mem_info[1])
 	used, _ := strconv.Atoi(mem_info[0])
 
-	m.MemUsage = strconv.Itoa(total / used)
+	m.MemUsage = fmt.Sprintf("%.2f", float64(total) / float64(used) * 100)
 	m.MemUsed = mem_info[1] + "M"
 	m.MemCache = mem_info[2] + "M"
 	m.MemFree = mem_info[3] + "M"
@@ -242,17 +242,13 @@ func getMemInfo() MemInfo {
 
 // 计算读写速率转换kb mb
 // 默认kb/s
-func calcRate(s string) string {
-	s = strings.Trim(s, "\n")
-	f, e := strconv.ParseFloat(s, 64)
-	if e != nil {
-		return fmt.Sprintf("%s KB/s", s)
-	}
+func calcRate(s interface{}) string {
+	f := s.(float64)
 	f2 := f / 1024
 	if f2 >= 1 {
 		return fmt.Sprintf("%.2f MB/s", f2)
 	}
-	return fmt.Sprintf("%s KB/s", s)
+	return fmt.Sprintf("%.2f KB/s", s)
 }
 
 // 计算读写量单位换算
@@ -334,10 +330,10 @@ func calcRetrans(send1, send2 string, r1, r2 string, offset int) string {
 
 	send := send2Int - send1Int
 	r := r2Int - r1Int
-	if send == 0 {
+	if send == 0 || r == 0 {
 		return "0"
 	}
-	return string(r / send * 1000 / offset)
+	return fmt.Sprintf("%d", r / send * 1000 / offset)
 }
 
 // 获取网络信息
@@ -479,42 +475,19 @@ func getDiskInfo(d string) DiskInfo {
 		disk.DiskUsed = "0"
 		disk.DiskAll = "0"
 	} else {
+		// 容量取整
 		disk.DiskMount = disk_info[0]
-		disk.DiskAll = disk_info[1]
-		disk.DiskUsed = disk_info[2]
+		disk.DiskAll = strings.Trim(disk_info[1], "\n")
+		disk.DiskUsed = strings.Trim(disk_info[2], "\n")
 		disk.DiskUsage = strings.Trim(disk_info[3], "%")
 	}
 
 	// 使用默认磁盘
 	if d != "" {
-		sh = fmt.Sprintf("iostat -d %s -x | awk 'NR==4{print $3,$6,$9,$12}'", d)
+		sh = fmt.Sprintf("iostat -d %s -x -o JSON", d)
 	} else {
-		sh = "iostat -d -x | grep -v loop | awk 'NR==4{print $3,$6,$9,$12}'"
+		sh = "iostat -d -x -o JSON"
 	}
-
-	// 读速率 读延迟 写速率k/s 写延迟
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
-	disk_info = strings.Fields(string(res))
-
-	if e != nil || len(disk_info) < 4 {
-		disk.DiskReadRate = "0 KB/s"
-		disk.DiskWriteRate = "0 KB/s"
-	}else {
-		disk.DiskReadRate = calcRate(strings.TrimSpace(disk_info[0]))
-		disk.DiskReadDelay = strings.TrimSpace(disk_info[1])
-		disk.DiskWriteRate = calcRate(strings.TrimSpace(disk_info[2]))
-		disk.DiskWriteDelay = strings.TrimSpace(disk_info[3])
-	}
-
-	// 读写量kb 因为版本问题不一致 不能使用列判断
-	if d != "" {
-		sh = fmt.Sprintf("iostat -d %s -o JSON", d)
-	}else {
-		sh = "iostat -d -o JSON"
-	}
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
 
 	type Disk struct {
 		Read string `json:"kB_read"`
@@ -532,6 +505,38 @@ func getDiskInfo(d string) DiskInfo {
 	type stat struct {
 		SysStat SysStat `json:"sysstat"`
 	}
+
+	// 读速率 读延迟 写速率k/s 写延迟
+	var td stat
+	cmd = exec.Command("bash", "-c", sh)
+	res, e = cmd.Output()
+
+	e = json.Unmarshal(res, &td)
+
+	readDelay := td.SysStat.Hosts[0].Statistics[0].Disk[0]["r_await"]
+	writeDelay := td.SysStat.Hosts[0].Statistics[0].Disk[0]["w_await"]
+	readRate := td.SysStat.Hosts[0].Statistics[0].Disk[0]["rkB/s"]
+	writeRate := td.SysStat.Hosts[0].Statistics[0].Disk[0]["wkB/s"]
+
+	if e != nil {
+		disk.DiskReadRate = "0 KB/s"
+		disk.DiskWriteRate = "0 KB/s"
+	}else {
+		disk.DiskReadRate = calcRate(readRate)
+		disk.DiskReadDelay = fmt.Sprintf("%.2f", readDelay.(float64))
+		disk.DiskWriteRate = calcRate(writeRate)
+		disk.DiskWriteDelay = fmt.Sprintf("%.2f", writeDelay.(float64))
+	}
+
+	// 读写量kb 因为版本问题不一致 不能使用列判断
+	if d != "" {
+		sh = fmt.Sprintf("iostat -d %s -o JSON", d)
+	}else {
+		sh = "iostat -d -o JSON"
+	}
+	cmd = exec.Command("bash", "-c", sh)
+	res, e = cmd.Output()
+
 	var t stat
 	e = json.Unmarshal(res, &t)
 
