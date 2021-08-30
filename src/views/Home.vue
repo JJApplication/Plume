@@ -66,19 +66,19 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">可用</span><br>
-                            <span class="cell-data">{{mem_free}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_free}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">已用</span><br>
-                            <span class="cell-data">{{mem_used}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_used}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">页面缓存</span><br>
-                            <span class="cell-data">{{mem_cache}}</span><span style="margin-left: 2px;font-size: .9rem">G</span>
+                            <span class="cell-data">{{mem_cache}}</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -101,8 +101,8 @@
                     </van-col>
                     <van-col span="8">
                         <div class="cell-data">
-                            <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span>G</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
-                            <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span>G</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
+                            <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
+                            <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
                         </div>
                     </van-col>
                     <van-col span="4">
@@ -145,7 +145,8 @@
                     </van-col>
                 </van-row>
                 <van-divider />
-                <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;NETWORK ⇌ {{ip}}</div>
+                <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv4</span> ⇌ {{ipv4}}</div>
+                <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv6</span> ⇌ {{ipv6}}</div>
             </div>
 
             <div class="cell">
@@ -159,8 +160,8 @@
                     </van-col>
                     <van-col span="12">
                         <div>
-                            <span class="cell-head">{{disk_used}}G</span>
-                            <span class="cell-head">/{{disk_all}}G</span>
+                            <span class="cell-head">{{disk_used}}</span>
+                            <span class="cell-head">/{{disk_all}}</span>
                             <div class="data-bar" id="data-bar"><span id="data-bar-inner"></span></div>
                         </div>
                     </van-col>
@@ -177,22 +178,22 @@
                     <van-col span="6">
                         <div>
                             <span class="cell-head">速率</span><br>
-                            <span class="cell-data">{{disk_read_rate}} MB/s</span><br>
-                            <span class="cell-data">{{disk_write_rate}} MB/s</span>
+                            <span class="cell-data">{{disk_read_rate}}</span><br>
+                            <span class="cell-data">{{disk_write_rate}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">字节</span><br>
-                            <span class="cell-data">{{disk_read_byte}} B</span><br>
-                            <span class="cell-data">{{disk_write_byte}} B</span>
+                            <span class="cell-data">{{disk_read_byte}}</span><br>
+                            <span class="cell-data">{{disk_write_byte}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
                         <div>
                             <span class="cell-head">延迟</span><br>
-                            <span class="cell-data">{{disk_read_delay}}</span><br>
-                            <span class="cell-data">{{disk_write_delay}}</span>
+                            <span class="cell-data">{{disk_read_delay}}ms</span><br>
+                            <span class="cell-data">{{disk_write_delay}}ms</span>
                         </div>
                     </van-col>
                 </van-row>
@@ -232,22 +233,24 @@ export default {
           mem_cache: 0,
 
           network_init: 0,
-          net_upload: '100m',
-          net_download: '100m',
-          network_upload: 100,
-          network_download: 100,
+          net_upload: '100mb',
+          net_download: '100mb',
+          network_upload: '100G',
+          network_download: '100G',
           network_percent: 0,
           net_retry: 0,
           net_active: 0,
           net_passive: 0,
           net_fail: 0,
-          ip: '127.0.0.1',
+          ipv4: '127.0.0.1',
+          ipv6: '::1',
 
           disk_mount: '/dev/vda1',
-          disk_used: 10,
-          disk_all: 20,
-          disk_read_rate: 0,
-          disk_write_rate: 0,
+          disk_used: '0G',
+          disk_all: '0G',
+          disk_usage: 50,
+          disk_read_rate: '0 KB/s',
+          disk_write_rate: '0 KB/s',
           disk_read_byte: 0,
           disk_write_byte: 0,
           disk_read_delay: 0,
@@ -293,7 +296,7 @@ export default {
       calcBar() {
           let bar = document.getElementById("data-bar-inner");
           if (bar) {
-              let height = (this.disk_used / this.disk_all * 100).toFixed(0);
+              let height = this.disk_usage;
               if (height >= 100) {
                   bar.style.borderRadius = '6px';
               }
@@ -326,6 +329,7 @@ export default {
             this.cpu_count = data.cpu_count;
             this.cpu_free = data.cpu_free;
             this.cpu_load = data.cpu_load;
+            this.cpu_run = data.cpu_run;
         }).catch(() => {
             this.notifyDanger("接口" + apis.api_cpu + "请求失败");
         });
@@ -348,7 +352,7 @@ export default {
               .then(res => {
                   let data = res.data.data;
                   this.net_upload = data.net_upload;
-                  this.net_download = data.network_download;
+                  this.net_download = data.net_download;
                   this.network_upload = data.network_upload;
                   this.network_download = data.network_download;
                   this.network_percent = this.calcNetPercent();
@@ -356,6 +360,8 @@ export default {
                   this.net_active = data.net_active;
                   this.net_passive = data.net_passive;
                   this.net_fail = data.net_fail;
+                  this.ipv4 = data.ipv4;
+                  this.ipv6 = data.ipv6;
               }).catch(() => {
               this.notifyDanger("接口" + apis.api_net + "请求失败");
           });
@@ -367,12 +373,15 @@ export default {
                   this.disk_mount = data.disk_mount;
                   this.disk_used = data.disk_used;
                   this.disk_all = data.disk_all;
+                  this.disk_usage = data.disk_usage;
                   this.disk_read_rate = data.disk_read_rate;
                   this.disk_write_rate = data.disk_write_rate;
                   this.disk_read_byte = data.disk_read_byte;
                   this.disk_write_byte = data.disk_write_byte;
                   this.disk_read_delay = data.disk_read_delay;
                   this.disk_write_delay = data.disk_write_delay;
+
+                  this.calcBar();
               }).catch(() => {
               this.notifyDanger("接口" + apis.api_disk + "请求失败");
           });
@@ -412,7 +421,7 @@ export default {
     }
     .cell {
         text-align: left;
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
         padding: 10px 20px;
         border-radius: 10px;
         margin-bottom: 20px;

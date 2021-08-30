@@ -211,10 +211,10 @@ export default {
         font-weight: normal;
     }
     .detail /deep/ .van-cell-group {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
     }
     .detail /deep/ .van-cell {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
         color: var(--light-text-color, #a0a0a0);
     }
     .detail /deep/ .van-hairline--top-bottom::after, .detail /deep/ .van-hairline-unset--top-bottom::after {

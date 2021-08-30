@@ -4,7 +4,7 @@ const consts = {
     default_theme: "light",
     theme_url: "/light.css",
     comps: "Home",
-    watch: false,
+    watchdog: false,
     duration: 10,
     limit: 80,
     key: '',

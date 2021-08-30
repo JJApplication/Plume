@@ -8,7 +8,7 @@ export function initStore() {
     initKey("app", consts.app)
     initKey("theme", consts.default_theme)
     initKey("comps", consts.comps)
-    initKey("watch", consts.watch)
+    initKey("watchdog", consts.watchdog)
     initKey("duration", consts.duration)
     initKey("limit", consts.limit)
     initKey("key", consts.key)

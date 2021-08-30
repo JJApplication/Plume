@@ -29,6 +29,8 @@ export default {
     watch: {
         "$store.state.comps": function () {
             this.Comps = this.$store.state.comps;
+            // 持久化标签路径
+            this.$store.commit('changeComps', this.Comps);
         },
     },
     mounted() {

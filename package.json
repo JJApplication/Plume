@@ -1,10 +1,11 @@
 {
   "name": "plume-app",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "go": "go build -o plume --trimpath plume.go"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.31",
@@ -15,12 +16,10 @@
     "register-service-worker": "^1.7.1",
     "vant": "^2.0.5",
     "vue": "^2.6.11",
-    "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-pwa": "~4.5.0",
-    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-plugin-vuex": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "axios": "^0.18.0",

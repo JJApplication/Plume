@@ -46,7 +46,7 @@ export default {
         padding: 8px 0;
     }
     .about /deep/ .van-cell {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
     }
     .about /deep/ .van-cell .van-cell__title span{
         color: var(--light-cell-title-color, #cfcfcf);

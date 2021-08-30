@@ -60,7 +60,7 @@
                     </van-field>
                     <van-field name="uploader" label="导入配置">
                         <template #input>
-                            <van-uploader />
+                            <van-uploader :before-read="loadConfig" :max-size="1024" accept=".json"/>
                         </template>
                     </van-field>
                 </van-cell-group>
@@ -72,7 +72,8 @@
 <script>
 import Header from "../components/Header";
 import {delStore, initStore} from "../plugins/store";
-import {exportConfig} from "../plugins/config";
+import {exportConfig, readConfig} from "../plugins/config";
+import consts from "../actions/consts";
 export default {
     name: "Setting",
     components: {Header},
@@ -170,6 +171,21 @@ export default {
                 message: JSON.stringify(data, ' ', 4),
             });
         },
+        // 导入配置，监听文件变更函数
+        loadConfig(file) {
+            let reader = new FileReader();
+            let that = this;
+            reader.readAsText(file, 'utf8')
+            reader.onload = function () {
+                let e = readConfig(this.result)
+                if (this.error || e === 'error') {
+                    that.$notify({ type: 'danger', message: '文件解析失败' });
+                }else {
+                    that.reloadState();
+                    that.$notify({ type: 'success', message: '配置更新成功' });
+                }
+            }
+        },
         notifyReset() {
             this.$notify({ type: 'primary', message: '配置重置完毕' });
         },
@@ -197,17 +213,17 @@ export default {
         height: 0;
     }
     .setting /deep/ .van-cell-group, .van-calendar {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
     }
     .setting /deep/ .van-cell {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
         color: var(--light-text-color, #a0a0a0);
     }
     .setting /deep/ .van-calendar__month-mark {
         color: var(--light-month-color, rgba(242,243,245,.1));
     }
     .setting /deep/ .van-stepper__minus, .setting /deep/ .van-stepper__plus, .setting /deep/ .van-stepper__minus--disabled, .setting /deep/ .van-stepper__plus--disabled,.setting /deep/  .van-stepper__input {
-        background-color: var(--light-step-bg-color, #1f1f1f);
+        background-color: var(--light-step-bg-color, #101010);
         color: var(--light-step-color, #cfcfcf);
     }
     .setting /deep/ .van-hairline--top-bottom::after, .setting /deep/ .van-hairline-unset--top-bottom::after {
@@ -226,6 +242,9 @@ export default {
     }
     .setting /deep/ .van-cell::after {
         border-bottom-color: var(--light-line-border-color, #707070);
+    }
+    .setting /deep/ .van-uploader__upload {
+        background-color: var(--light-bg-container-color, #101010);
     }
 </style>
 

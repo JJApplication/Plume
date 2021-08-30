@@ -125,7 +125,7 @@ export default {
     }
     .container .container-body {
         cursor: pointer;
-        background-color: var(--light-bg-docker-color, #2f2f2f);
+        background-color: var(--light-bg-docker-color, #2a2b2b);
         padding: 10px;
         border-radius: 8px;
         margin-bottom: 10px;

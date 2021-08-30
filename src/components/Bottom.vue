@@ -1,10 +1,10 @@
 <template>
     <div class="bottom">
         <van-tabbar v-model="active">
-            <van-tabbar-item replace to="/" @click="changeIt('Home')"><font-awesome-icon icon="border-all" class="bottom-icon"></font-awesome-icon>面板</van-tabbar-item>
-            <van-tabbar-item replace to="/container" @click="changeIt('Container')"><font-awesome-icon icon="atom" class="bottom-icon"></font-awesome-icon>容器</van-tabbar-item>
-            <van-tabbar-item replace to="/setting" @click="changeIt('Setting')"><font-awesome-icon icon="cog" class="bottom-icon"></font-awesome-icon>设置</van-tabbar-item>
-            <van-tabbar-item replace to="/about" @click="changeIt('About')"><font-awesome-icon icon="copyright" class="bottom-icon"></font-awesome-icon>关于</van-tabbar-item>
+            <van-tabbar-item name="Home" @click="changeIt('Home')"><font-awesome-icon icon="border-all" class="bottom-icon"></font-awesome-icon>面板</van-tabbar-item>
+            <van-tabbar-item name="Container" @click="changeIt('Container')"><font-awesome-icon icon="atom" class="bottom-icon"></font-awesome-icon>容器</van-tabbar-item>
+            <van-tabbar-item name="Setting" @click="changeIt('Setting')"><font-awesome-icon icon="cog" class="bottom-icon"></font-awesome-icon>设置</van-tabbar-item>
+            <van-tabbar-item name="About" @click="changeIt('About')"><font-awesome-icon icon="copyright" class="bottom-icon"></font-awesome-icon>关于</van-tabbar-item>
         </van-tabbar>
         <div class="van-safe-area-bottom"></div>
     </div>
@@ -18,7 +18,12 @@ export default {
     name: "Bottom",
     data(){
         return {
-            active: 0
+            active: this.$store.state.comps ? this.$store.state.comps : 'Home',
+            watch: {
+                "$store.state.comps": function () {
+                    this.active = this.$store.state.comps;
+                }
+            }
         }
     },
     methods: {
@@ -49,7 +54,7 @@ export default {
         transform: translateX(-50%);
     }
     .bottom /deep/ .van-tabbar, .van-tabbar-item--active {
-        background-color: var(--light-bg-color, #2f2f2f);
+        background-color: var(--light-bg-color, #202020);
     }
     .bottom /deep/ .van-tabbar-item {
         color: var(--light-text-color, #a0a0a0);
