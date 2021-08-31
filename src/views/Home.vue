@@ -152,13 +152,13 @@
             <div class="cell">
                 <p class="cell-title">磁盘IO</p>
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="12">
+                    <van-col span="14">
                         <div>
                             <span class="cell-head" style="font-weight: bold">/</span><br>
                             <span class="cell-data">{{ disk_mount }}</span>
                         </div>
                     </van-col>
-                    <van-col span="12">
+                    <van-col span="10">
                         <div>
                             <span class="cell-head">{{disk_used}}</span>
                             <span class="cell-head">/{{disk_all}}</span>
