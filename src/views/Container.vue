@@ -11,6 +11,7 @@
         />
         <div class="scroll">
             <van-skeleton title :row="6" :loading="!visible" style="margin-top: 2rem"/>
+            <van-empty description="容器功能将在后台支持Docker API时自动开启" image="network" v-show="!containers" />
             <transition name="van-slide-down">
                 <div v-show="visible" class="container-list">
                     <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
