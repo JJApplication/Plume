@@ -52,9 +52,18 @@
                     </van-col>
                     <van-col span="6">
                         <div>
-                            <span class="cell-head">平均负载</span><br>
-                            <span class="cell-data">{{cpu_load}}</span>
+                            <div class="load-bar"><span id="m1"></span></div>
+                            <div class="load-bar"><span id="m5"></span></div>
+                            <div class="load-bar"><span id="m15"></span></div>
                         </div>
+                    </van-col>
+                </van-row>
+                <van-divider />
+                <van-row>
+                    <van-col span="24">
+                        <font-awesome-icon icon="network-wired" style="font-size: .9rem;margin-right: 4px"/>
+                            <span class="cell-head" style="margin-right: 16px">平均负载</span>
+                            <span class="cell-data">{{cpu_load}}</span>
                     </van-col>
                 </van-row>
             </div>
@@ -84,6 +93,93 @@
                 </van-row>
             </div>
 
+            <div class="cell"  @click="show_progress = true">
+                <p class="cell-title">进程</p>
+                <van-row style="margin-top: .5rem">
+                    <van-col span="24">
+                        <font-awesome-icon :icon="['fab', 'ubuntu']" v-if="kernel_os === 'ubuntu'" style="font-size: .9rem;margin-right: 4px"/>
+                        <font-awesome-icon :icon="['fab', 'centos']" v-else-if="kernel_os === 'centos'" style="font-size: .9rem;margin-right: 4px"/>
+                        <font-awesome-icon :icon="['fab', 'suse']" v-else-if="kernel_os === 'suse'" style="font-size: .9rem;margin-right: 4px"/>
+                        <font-awesome-icon :icon="['fab', 'redhat']" v-else-if="kernel_os === 'redhat'" style="font-size: .9rem;margin-right: 4px"/>
+                        <font-awesome-icon :icon="['fab', 'fedora']" v-else-if="kernel_os === 'fedora'" style="font-size: .9rem;margin-right: 4px"/>
+                        <font-awesome-icon :icon="['fab', 'linux']" v-else style="font-size: .9rem;margin-right: 4px"/>
+                        <span class="cell-data" style="margin-right: 8px">{{ kernel_type }}</span>
+                        <span class="cell-data">{{kernel_version}}</span>
+                    </van-col>
+                </van-row>
+                <van-divider />
+                <van-row gutter="20" justify="center">
+                    <van-col span="6">
+                        <div>
+                            <span class="cell-head">总进程</span><br>
+                            <span class="cell-data">{{progress_all}}</span>
+                        </div>
+                    </van-col>
+                    <van-col span="6">
+                        <div>
+                            <span class="cell-head">运行进程</span><br>
+                            <span class="cell-data">{{progress_run}}</span>
+                        </div>
+                    </van-col>
+                    <van-col span="6">
+                        <div>
+                            <span class="cell-head">僵尸进程</span><br>
+                            <span class="cell-data">{{progress_dead}}</span>
+                        </div>
+                    </van-col>
+                    <van-col span="6">
+                        <div>
+                            <span class="cell-head">休眠进程</span><br>
+                            <span class="cell-data">{{progress_sleep}}</span>
+                        </div>
+                    </van-col>
+                </van-row>
+            </div>
+            <!--配套的进程详情-->
+            <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0">
+                <div class="content" style="padding: 0 10px;text-align: left">
+                    <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                        <van-col span="4">
+                            <span class="bold" style="margin-right: 16px;font-weight: bold">PID</span>
+                        </van-col>
+                        <van-col span="4">
+                            <span style="margin-right: 16px;font-weight: bold">cpu(%)</span>
+                        </van-col>
+                        <van-col span="4">
+                            <span class="cell-head" style="margin-right: 16px;font-weight: bold">mem(%)</span>
+                        </van-col>
+                        <van-col span="12" align="center">
+                            <span class="cell-head" style="margin-right: 16px;font-weight: bold">命令</span>
+                        </van-col>
+                    </van-row>
+                    <div v-for="p in progress_list">
+                        <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                            <van-col span="4">
+                                <span class="bold" style="margin-right: 16px;font-size: .9rem">{{ p.pid }}</span>
+                            </van-col>
+                            <van-col span="4">
+                                <span style="margin-right: 16px;font-size: .9rem">{{ p.cpu }}</span>
+                            </van-col>
+                            <van-col span="4">
+                                <span class="cell-head" style="margin-right: 16px;font-size: .9rem">{{ p.mem }}</span>
+                            </van-col>
+                            <van-col span="12">
+                                <span class="cell-head"
+                                      style="margin-right: 16px;
+                                      width: 90%;
+                                      font-size: .9rem;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                      display: inline-block;
+                                      white-space: nowrap"
+                                      :title="p.cmd"
+                                >{{ p.cmd }}</span>
+                            </van-col>
+                        </van-row>
+                    </div>
+                </div>
+            </van-action-sheet>
+
             <div class="cell">
                 <p class="cell-title">网络IO</p>
                 <van-row gutter="10" justify="center" style="margin-top: .5rem">
@@ -99,22 +195,20 @@
                             <span class="cell-data">{{net_download}} /s</span>
                         </div>
                     </van-col>
-                    <van-col span="8">
+                    <van-col span="6">
                         <div class="cell-data">
                             <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
                             <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
                         </div>
                     </van-col>
-                    <van-col span="4">
-                        <div>
+                    <van-col span="6" align="center">
                             <van-circle
                                     v-model:current-rate="network_init"
                                     :rate="network_percent" :speed="100"
-                                    :stroke-width="160"
-                                    size="50px"
+                                    :stroke-width="180"
+                                    size="42px"
                                     color="var(--light-circle-color, #7fff00)"
                                     layer-color="var(--light-circle-bg-color, #ff7f50)"/>
-                        </div>
                     </van-col>
                 </van-row>
                 <van-divider />
@@ -151,14 +245,14 @@
 
             <div class="cell">
                 <p class="cell-title">磁盘IO</p>
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                <van-row gutter="10" justify="center" style="margin-top: .5rem">
                     <van-col span="14">
                         <div>
                             <span class="cell-head" style="font-weight: bold">/</span><br>
                             <span class="cell-data">{{ disk_mount }}</span>
                         </div>
                     </van-col>
-                    <van-col span="10">
+                    <van-col span="10" align="center">
                         <div>
                             <span class="cell-head">{{disk_used}}</span>
                             <span class="cell-head">/{{disk_all}}</span>
@@ -167,7 +261,7 @@
                     </van-col>
                 </van-row>
                 <van-divider />
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                <van-row gutter="20" justify="end" style="margin-top: .5rem">
                     <van-col span="4">
                         <div>
                             <span class="cell-head cell-io"></span><br>
@@ -227,10 +321,20 @@ export default {
           cpu_run: 0,
           cpu_load: '0,0,0',
 
-          mem_usage: 0,
+          mem_usage: '10.00',
           mem_free: 0,
           mem_used: 0,
           mem_cache: 0,
+
+          kernel_os: 'linux',
+          kernel_type: 'x86_64',
+          kernel_version: 'unknown version',
+          progress_all: 0,
+          progress_run: 0,
+          progress_dead: 0,
+          progress_sleep: 0,
+          show_progress: false,
+          progress_list: [{pid: 0, cpu: 0.4, mem: 0.1, cmd: '/bin/echo hello'}],
 
           network_init: 0,
           net_upload: '100mb',
@@ -275,8 +379,13 @@ export default {
               this.getServerData();
               this.getCPUdata();
               this.getMemData();
+              this.getKernelData();
+              this.getProgressData();
               this.getNetData();
               this.getDiskData();
+              if (this.show_progress) {
+                  this.getProgressListData();
+              }
           }else {
               this.calcNetPercent();
               this.calcBar();
@@ -321,6 +430,40 @@ export default {
               bar.style.height = height + '%';
           }
       },
+      calcLoad(load, cpu_count) {
+          let m1 = document.getElementById("m1");
+          let m5 = document.getElementById("m5");
+          let m15 = document.getElementById("m15");
+
+          let loads = load.split(" ");
+          if (m1) {
+              let height = loads[0] * 100 / cpu_count / 2;
+              height = Math.floor(height);
+              if (height >= 100) {
+                  height = 100;
+                  m1.style.borderRadius = '4px';
+              }
+              m1.style.height = height + '%';
+          }
+          if (m5) {
+              let height = loads[1] * 100 / cpu_count / 2;
+              height = Math.floor(height);
+              if (height >= 100) {
+                  height = 100;
+                  m5.style.borderRadius = '4px';
+              }
+              m5.style.height = height + '%';
+          }
+          if (m15) {
+              let height = loads[2] * 100 / cpu_count / 2;
+              height = Math.floor(height);
+              if (height >= 100) {
+                  height = 100;
+                  m15.style.borderRadius = '4px';
+              }
+              m15.style.height = height + '%';
+          }
+      },
       // 告警提示
       notifyDanger(message) {
           this.$notify({ type: 'danger', message: message });
@@ -348,7 +491,10 @@ export default {
             this.cpu_free = data.cpu_free;
             this.cpu_load = data.cpu_load;
             this.cpu_run = data.cpu_run;
-        }).catch(() => {
+
+            this.calcLoad(this.cpu_load, this.cpu_count);
+        }).catch((e) => {
+            console.log(e)
             this.notifyDanger("接口" + apis.api_cpu + "请求失败");
         });
       },
@@ -402,6 +548,38 @@ export default {
                   this.calcBar();
               }).catch(() => {
               this.notifyDanger("接口" + apis.api_disk + "请求失败");
+          });
+      },
+        getKernelData() {
+            this.$axios.post(apis.api_kernel)
+                .then(res => {
+                    let data = res.data.data;
+                    this.kernel_os = data.kernel_os;
+                    this.kernel_type = data.kernel_type;
+                    this.kernel_version = data.kernel_version;
+                }).catch(() => {
+                this.notifyDanger("接口" + apis.api_kernel + "请求失败");
+            });
+        },
+        getProgressData() {
+            this.$axios.post(apis.api_progress)
+                .then(res => {
+                    let data = res.data.data;
+                    this.progress_all = data.progress_all;
+                    this.progress_dead = data.progress_dead;
+                    this.progress_run = data.progress_run;
+                    this.progress_sleep = data.progress_sleep;
+                }).catch(() => {
+                this.notifyDanger("接口" + apis.api_progress + "请求失败");
+            });
+        },
+      // 获得进程列表
+      getProgressListData() {
+          this.$axios.post(apis.api_progress_list + "?num=" + this.$store.state.progress)
+              .then(res => {
+                  this.progress_list = res.data.data;
+              }).catch(() => {
+              this.notifyDanger("接口" + apis.api_progress_list + "请求失败");
           });
       }
     }
@@ -481,6 +659,27 @@ export default {
     .cell-head.cell-head-mem {
         font-size: 1.6rem;
     }
+
+    @media (max-width: 580px) {
+        .cell-head.cell-head-mem {
+            font-size: 1.4rem;
+        }
+    }
+    @media (max-width: 540px) {
+        .cell-head.cell-head-mem {
+            font-size: 1.2rem;
+        }
+    }
+    @media (max-width: 440px) {
+        .cell-head.cell-head-mem {
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 380px) {
+        .cell-head.cell-head-mem {
+            font-size: .85rem;
+        }
+    }
     .data-bar {
         height: 40px;
         width: 24px;
@@ -497,10 +696,48 @@ export default {
         display: inline-block;
         position: absolute;
         bottom: 0;
+        left: 0;
         border-bottom-left-radius: 6px;
         border-bottom-right-radius: 6px;
         transition: height .3s ease;
     }
+
+    .load-bar {
+        height: 30px;
+        width: 16px;
+        display: inline-block;
+        background-color: var(--light-bg-container-color, #1a1a1a);
+        position: relative;
+        border-radius: 4px;
+        margin-right: 4px;
+    }
+
+    .load-bar:last-child {
+        margin-right: 0;
+    }
+
+    .load-bar span {
+        height: 30%;
+        width: 16px;
+        display: inline-block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        transition: height .3s ease;
+    }
+
+    .load-bar #m1 {
+        background-color: #65ff1c;
+    }
+    .load-bar #m5 {
+        background-color: #ff9b1b;
+    }
+    .load-bar #m15 {
+        background-color: #ff4e06;
+    }
+
     .cell-head.cell-io {
         height: 10px;
         width: 10px;
@@ -514,5 +751,14 @@ export default {
     }
     .cell /deep/ .van-divider {
         border-color: var(--light-line-border-color, #707070);
+    }
+    .home /deep/ .van-divider {
+        margin: 10px 0;
+    }
+    .home /deep/ .van-popup {
+        background-color: var(--light-bg-container-color, #1a1a1a);
+    }
+    .home /deep/ .van-action-sheet {
+        color: var(--light-text-color, #a0a0a0);
     }
 </style>

@@ -8,6 +8,7 @@ const consts = {
     duration: 10,
     limit: 80,
     key: '',
-    api: '/api'
+    api: '/api',
+    progress: 15
 }
 export default consts;

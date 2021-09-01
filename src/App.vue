@@ -32,6 +32,9 @@ export default {
             // 持久化标签路径
             this.$store.commit('changeComps', this.Comps);
         },
+        "$store.state.app": function () {
+            document.title = this.$store.state.app;
+        },
     },
     mounted() {
         setTimeout(() => {

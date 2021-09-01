@@ -7,7 +7,7 @@
         <van-cell-group inset>
             <van-cell title="Github" label="github.com/landers1037/plume" is-link url="https://github.com/landers1037/plume" />
             <van-cell title="在线示例" label="plume.renj.io" is-link url="http://plume.renj.io" />
-            <van-cell title="贡献issue" label="github.com/landers1037/plume" is-link url="https://github.com/landers1037/plume" />
+            <van-cell title="贡献issue" label="github.com/landers1037/plume" is-link url="https://github.com/Landers1037/plume/issues" />
         </van-cell-group>
 
         <div style="margin-top: 2rem">

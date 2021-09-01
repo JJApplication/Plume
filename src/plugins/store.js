@@ -13,6 +13,7 @@ export function initStore() {
     initKey("limit", consts.limit)
     initKey("key", consts.key)
     initKey("api", consts.api)
+    initKey("progress", consts.progress)
     initKey("theme_url", consts.theme_url)
 }
 

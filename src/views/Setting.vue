@@ -35,7 +35,12 @@
                     </van-field>
                     <van-field name="stepper" label="告警阈值(%)">
                         <template #input>
-                            <van-stepper v-model="limit" />
+                            <van-stepper max="100" v-model="limit" />
+                        </template>
+                    </van-field>
+                    <van-field name="stepper" label="进程数量">
+                        <template #input>
+                            <van-stepper max="50" v-model="progress" />
                         </template>
                     </van-field>
                     <van-field name="switch" label="暂停监控">
@@ -63,8 +68,31 @@
                             <van-uploader :before-read="loadConfig" :max-size="1024" accept=".json"/>
                         </template>
                     </van-field>
+                    <van-field label="查看日志" @click="showLog">
+                        <template #input>
+                            <van-button type="default" size="mini"><font-awesome-icon icon="code" style="padding: 0 4px"/>查看</van-button>
+                        </template>
+                    </van-field>
+                    <van-field label="清空日志" @click="clearLog">
+                        <template #input>
+                            <van-button type="default" size="mini"><font-awesome-icon icon="truck" style="padding: 0 4px"/>清空</van-button>
+                        </template>
+                    </van-field>
                 </van-cell-group>
             </div>
+            <van-action-sheet v-model:show="show_log" title="运行日志" style="padding: 10px 0">
+                <div class="content" style="padding: 0 10px;text-align: left">
+                    <van-skeleton title :row="6" :loading="show_load && show_log"/>
+                    <pre
+                    style="word-break: break-all;
+                        word-spacing: normal;
+                        white-space: pre-line;
+                        border-radius: 8px;
+                        padding: 10px 4px;
+                        background-color: var(--light-bg-docker-color, #2a2b2b);"
+                    >{{log}}</pre>
+                </div>
+            </van-action-sheet>
         </div>
     </div>
 </template>
@@ -73,7 +101,7 @@
 import Header from "../components/Header";
 import {delStore, initStore} from "../plugins/store";
 import {exportConfig, readConfig} from "../plugins/config";
-import consts from "../actions/consts";
+import apis from "../actions/api";
 export default {
     name: "Setting",
     components: {Header},
@@ -85,7 +113,11 @@ export default {
             duration: this.$store.state.duration,
             limit: this.$store.state.limit,
             watchdog: this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true,
-            api: this.$store.state.api
+            api: this.$store.state.api,
+            progress: this.$store.state.progress,
+            show_log: false,
+            show_load: true,
+            log: '',
         }
     },
     computed: {
@@ -102,6 +134,7 @@ export default {
         this.limit = this.$store.state.limit;
         this.watchdog = this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true;
         this.api = this.$store.state.api;
+        this.progress = this.$store.state.progress;
     },
     watch: {
         theme: function () {
@@ -136,6 +169,10 @@ export default {
         api: function () {
             console.log('api changed', this.api);
             this.$store.commit('changeApi', this.api);
+        },
+        progress: function () {
+            console.log('progress num changed', this.progress);
+            this.$store.commit('changeProgress', this.progress);
         }
     },
     methods: {
@@ -158,8 +195,9 @@ export default {
             this.key = this.$store.state.key;
             this.duration = this.$store.state.duration;
             this.limit = this.$store.state.limit;
-            this.watch = this.$store.state.watch;
+            this.watchdog = this.$store.state.watchdog;
             this.api = this.$store.state.api;
+            this.progress = this.$store.state.progress;
         },
         exportStore() {
           // 暂时仅做json转换显示
@@ -186,6 +224,33 @@ export default {
                 }
             }
         },
+        showLog() {
+            this.show_log = true;
+            this.$axios.post(apis.api_log)
+            .then(res => {
+                if (res.data.data && res.data.data !== '') {
+                    this.log = res.data.data;
+                    this.show_load = false;
+                } else {
+                    this.log = '暂时没有日志';
+                    this.show_load = false;
+                }
+            }).catch(()=>{
+                this.$notify({ type: 'danger', message: '日志获取失败' });
+            })
+        },
+        clearLog() {
+            this.$axios.post(apis.api_log_del)
+                .then(res => {
+                    if (res.data.data && res.data.data === "ok" ) {
+                            this.$notify({ type: 'success', message: '日志清空完毕' });
+                    } else {
+                            this.$notify({ type: 'danger', message: '日志清空失败' });
+                    }
+                }).catch(()=>{
+                this.$notify({ type: 'danger', message: '日志清空失败' });
+            })
+        },
         notifyReset() {
             this.$notify({ type: 'primary', message: '配置重置完毕' });
         },
@@ -204,7 +269,7 @@ export default {
     .setting .scroll {
         margin-top: 20px;
         overflow-y: auto;
-        height: calc(100% - 100px);
+        height: calc(100% - 110px);
         border-radius: 10px;
     }
     .setting .scroll::-webkit-scrollbar {
@@ -234,6 +299,7 @@ export default {
     }
     .setting /deep/ .van-button--mini {
         padding: 2px 8px;
+        font-size: 12px;
     }
     @media (max-width: 480px) {
         .setting /deep/ .van-cell-group--inset {
@@ -245,6 +311,12 @@ export default {
     }
     .setting /deep/ .van-uploader__upload {
         background-color: var(--light-bg-container-color, #101010);
+    }
+    .setting /deep/ .van-popup {
+        background-color: var(--light-bg-container-color, #1a1a1a);
+    }
+    .setting /deep/ .van-action-sheet {
+        color: var(--light-text-color, #a0a0a0);
     }
 </style>
 

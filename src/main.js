@@ -2,7 +2,6 @@ import Vue from 'vue'
 import './plugins/fontawesome'
 import './plugins/axios'
 import App from './App.vue'
-import './registerServiceWorker'
 import store from './store'
 import './plugins/vant.js'
 

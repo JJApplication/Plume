@@ -17,6 +17,7 @@ export default new Vuex.Store({
     limit: getStore("limit"),
     key: getStore("key"),
     api: getStore("api"),
+    progress: getStore("progress"),
     // 容器id无需持久化
     container_id: ''
   },
@@ -62,6 +63,10 @@ export default new Vuex.Store({
     changeID(state, id) {
       state.container_id = id;
     },
+    changeProgress(state, pro) {
+      saveStore("progress", pro);
+      state.progress = pro
+    },
     clearAll(state) {
       state.app = null;
       state.theme = null;
@@ -70,6 +75,7 @@ export default new Vuex.Store({
       state.limit = null;
       state.key = null;
       state.api = null;
+      state.progress = null;
     },
     reloadAll(state) {
       state.app = getStore("app");
@@ -79,6 +85,7 @@ export default new Vuex.Store({
       state.limit = getStore("limit");
       state.key = getStore("key");
       state.api = getStore("api");
+      state.progress = getStore("progress");
     }
   },
   actions: {
