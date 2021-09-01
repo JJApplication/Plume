@@ -1,4 +1,5 @@
 const apis = {
+    api_comb: '/comb',
     api_server: '/server',
     api_cpu: '/cpu',
     api_mem: '/mem',

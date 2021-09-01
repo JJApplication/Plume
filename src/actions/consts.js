@@ -9,6 +9,7 @@ const consts = {
     limit: 80,
     key: '',
     api: '/api',
+    comb: false,
     progress: 15
 }
 export default consts;

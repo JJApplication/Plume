@@ -375,16 +375,24 @@ export default {
     },
     mounted() {
       this.global_timer = setInterval(() => {
+          // 是否使用整合接口获取数据
           if (this.$store.state.comps === 'Home' && this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false) {
-              this.getServerData();
-              this.getCPUdata();
-              this.getMemData();
-              this.getKernelData();
-              this.getProgressData();
-              this.getNetData();
-              this.getDiskData();
-              if (this.show_progress) {
-                  this.getProgressListData();
+              if (this.$store.state.comb === 'true' || this.$store.state.comb === true) {
+                  this.getCombinationData();
+                  if (this.show_progress) {
+                      this.getProgressListData();
+                  }
+              }else {
+                  this.getServerData();
+                  this.getCPUdata();
+                  this.getMemData();
+                  this.getKernelData();
+                  this.getProgressData();
+                  this.getNetData();
+                  this.getDiskData();
+                  if (this.show_progress) {
+                      this.getProgressListData();
+                  }
               }
           }else {
               this.calcNetPercent();
@@ -473,8 +481,10 @@ export default {
           this.$axios.post(apis.api_server)
           .then(res => {
               this.server = res.data.data ? res.data.data : 'Unrecognizable server type';
-          }).catch(()=>{
-              this.notifyDanger("接口" + apis.api_server + "请求失败");
+          }).catch((e)=>{
+              if (e.response.data !== "key error") {
+                  this.notifyDanger("接口" + apis.api_server + "请求失败");
+              }
               this.server = 'Unrecognizable server type';
           })
       },
@@ -494,8 +504,9 @@ export default {
 
             this.calcLoad(this.cpu_load, this.cpu_count);
         }).catch((e) => {
-            console.log(e)
-            this.notifyDanger("接口" + apis.api_cpu + "请求失败");
+            if (e.response.data !== "key error") {
+                this.notifyDanger("接口" + apis.api_cpu + "请求失败");
+            }
         });
       },
       // 获取内存信息
@@ -507,8 +518,10 @@ export default {
                   this.mem_free = data.mem_free;
                   this.mem_used = data.mem_used;
                   this.mem_cache = data.mem_cache;
-              }).catch(() => {
-              this.notifyDanger("接口" + apis.api_mem + "请求失败");
+              }).catch((e) => {
+              if (e.response.data !== "key error") {
+                  this.notifyDanger("接口" + apis.api_mem + "请求失败");
+              }
           });
       },
       getNetData() {
@@ -526,8 +539,10 @@ export default {
                   this.net_fail = data.net_fail;
                   this.ipv4 = data.ipv4;
                   this.ipv6 = data.ipv6;
-              }).catch(() => {
-              this.notifyDanger("接口" + apis.api_net + "请求失败");
+              }).catch((e) => {
+              if (e.response.data !== "key error") {
+                  this.notifyDanger("接口" + apis.api_net + "请求失败");
+              }
           });
       },
       getDiskData() {
@@ -546,8 +561,10 @@ export default {
                   this.disk_write_delay = data.disk_write_delay;
 
                   this.calcBar();
-              }).catch(() => {
-              this.notifyDanger("接口" + apis.api_disk + "请求失败");
+              }).catch((e) => {
+              if (e.response.data !== "key error") {
+                  this.notifyDanger("接口" + apis.api_disk + "请求失败");
+              }
           });
       },
         getKernelData() {
@@ -557,8 +574,10 @@ export default {
                     this.kernel_os = data.kernel_os;
                     this.kernel_type = data.kernel_type;
                     this.kernel_version = data.kernel_version;
-                }).catch(() => {
-                this.notifyDanger("接口" + apis.api_kernel + "请求失败");
+                }).catch((e) => {
+                if (e.response.data !== "key error") {
+                    this.notifyDanger("接口" + apis.api_kernel + "请求失败");
+                }
             });
         },
         getProgressData() {
@@ -569,8 +588,10 @@ export default {
                     this.progress_dead = data.progress_dead;
                     this.progress_run = data.progress_run;
                     this.progress_sleep = data.progress_sleep;
-                }).catch(() => {
-                this.notifyDanger("接口" + apis.api_progress + "请求失败");
+                }).catch((e) => {
+                if (e.response.data !== "key error") {
+                    this.notifyDanger("接口" + apis.api_progress + "请求失败");
+                }
             });
         },
       // 获得进程列表
@@ -578,10 +599,79 @@ export default {
           this.$axios.post(apis.api_progress_list + "?num=" + this.$store.state.progress)
               .then(res => {
                   this.progress_list = res.data.data;
-              }).catch(() => {
-              this.notifyDanger("接口" + apis.api_progress_list + "请求失败");
+              }).catch((e) => {
+              if (e.response.data !== "key error") {
+                  this.notifyDanger("接口" + apis.api_progress_list + "请求失败");
+              }
           });
-      }
+      },
+        getCombinationData() {
+            this.$axios.post(apis.api_comb)
+                .then(res => {
+                    let server_data = res.data.data.server_info;
+                    this.server = server_data? server_data: 'Unrecognizable server type';
+
+                    let cpu_data = res.data.data.cpu_info;
+                    this.cpu_usage = cpu_data.cpu_usage;
+                    this.cpu_usage_system = cpu_data.cpu_usage_system;
+                    this.cpu_usage_user = cpu_data.cpu_usage_user;
+                    this.cpu_io_wait = cpu_data.cpu_io_wait;
+                    this.cpu_count = cpu_data.cpu_count;
+                    this.cpu_free = cpu_data.cpu_free;
+                    this.cpu_load = cpu_data.cpu_load;
+                    this.cpu_run = cpu_data.cpu_run;
+
+                    this.calcLoad(this.cpu_load, this.cpu_count);
+
+                    let mem_data = res.data.data.mem_info;
+                    this.mem_usage = mem_data.mem_usage;
+                    this.mem_free = mem_data.mem_free;
+                    this.mem_used = mem_data.mem_used;
+                    this.mem_cache = mem_data.mem_cache;
+
+                    let kernel_data = res.data.data.kernel_info;
+                    this.kernel_os = kernel_data.kernel_os;
+                    this.kernel_type = kernel_data.kernel_type;
+                    this.kernel_version = kernel_data.kernel_version;
+
+                    let progress_data = res.data.data.progress_info;
+                    this.progress_all = progress_data.progress_all;
+                    this.progress_dead = progress_data.progress_dead;
+                    this.progress_run = progress_data.progress_run;
+                    this.progress_sleep = progress_data.progress_sleep;
+
+                    let net_data = res.data.data.net_info;
+                    this.net_upload = net_data.net_upload;
+                    this.net_download = net_data.net_download;
+                    this.network_upload = net_data.network_upload;
+                    this.network_download = net_data.network_download;
+                    this.network_percent = this.calcNetPercent();
+                    this.net_retry = net_data.net_retry;
+                    this.net_active = net_data.net_active;
+                    this.net_passive = net_data.net_passive;
+                    this.net_fail = net_data.net_fail;
+                    this.ipv4 = net_data.ipv4;
+                    this.ipv6 = net_data.ipv6;
+
+                    let disk_data = res.data.data.disk_info;
+                    this.disk_mount = disk_data.disk_mount;
+                    this.disk_used = disk_data.disk_used;
+                    this.disk_all = disk_data.disk_all;
+                    this.disk_usage = disk_data.disk_usage;
+                    this.disk_read_rate = disk_data.disk_read_rate;
+                    this.disk_write_rate = disk_data.disk_write_rate;
+                    this.disk_read_byte = disk_data.disk_read_byte;
+                    this.disk_write_byte = disk_data.disk_write_byte;
+                    this.disk_read_delay = disk_data.disk_read_delay;
+                    this.disk_write_delay = disk_data.disk_write_delay;
+
+                    this.calcBar();
+                }).catch((e) => {
+                    if (e.response.data !== "key error") {
+                        this.notifyDanger("接口" + apis.api_comb + "请求失败");
+                    }
+            });
+        }
     }
 }
 </script>

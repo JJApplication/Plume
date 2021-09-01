@@ -17,6 +17,7 @@ export default new Vuex.Store({
     limit: getStore("limit"),
     key: getStore("key"),
     api: getStore("api"),
+    comb: getStore("comb"),
     progress: getStore("progress"),
     // 容器id无需持久化
     container_id: ''
@@ -59,6 +60,10 @@ export default new Vuex.Store({
     changeApi(state, api) {
       saveStore("api", api);
       state.api = api;
+    },
+    changeComb(state, comb) {
+      saveStore("comb", comb);
+      state.comb = comb;
     },
     changeID(state, id) {
       state.container_id = id;

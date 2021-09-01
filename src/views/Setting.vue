@@ -48,6 +48,11 @@
                             <van-switch v-model="watchdog" size="20" active-color="var(--light-text-active-color, #ff4a9e)" />
                         </template>
                     </van-field>
+                    <van-field name="switch" label="整合接口">
+                        <template #input>
+                            <van-switch v-model="comb" size="20" active-color="var(--light-text-active-color, #ff4a9e)" />
+                        </template>
+                    </van-field>
                     <van-field name="switch" label="重置配置" @click="resetStore">
                         <template #input>
                             <van-button type="info" size="mini"><font-awesome-icon icon="sync-alt" style="padding: 0 4px"/>重置</van-button>
@@ -114,6 +119,7 @@ export default {
             limit: this.$store.state.limit,
             watchdog: this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true,
             api: this.$store.state.api,
+            comb: this.$store.state.comb  === 'true' || this.$store.state.comb === true,
             progress: this.$store.state.progress,
             show_log: false,
             show_load: true,
@@ -134,6 +140,7 @@ export default {
         this.limit = this.$store.state.limit;
         this.watchdog = this.$store.state.watchdog === 'true' || this.$store.state.watchdog === true;
         this.api = this.$store.state.api;
+        this.comb = this.$store.state.comb  === 'true' || this.$store.state.comb === true;
         this.progress = this.$store.state.progress;
     },
     watch: {
@@ -170,6 +177,10 @@ export default {
             console.log('api changed', this.api);
             this.$store.commit('changeApi', this.api);
         },
+        comb: function () {
+            console.log('comb changed', this.comb);
+            this.$store.commit('changeComb', this.comb);
+        },
         progress: function () {
             console.log('progress num changed', this.progress);
             this.$store.commit('changeProgress', this.progress);
@@ -197,6 +208,7 @@ export default {
             this.limit = this.$store.state.limit;
             this.watchdog = this.$store.state.watchdog;
             this.api = this.$store.state.api;
+            this.comb = this.$store.state.comb;
             this.progress = this.$store.state.progress;
         },
         exportStore() {

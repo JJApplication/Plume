@@ -12,11 +12,12 @@ import (
 )
 
 // 服务app
-func engine(eth, disk, log string) *gin.Engine {
+func engine(eth, disk, log, key string) *gin.Engine {
 	gin.SetMode(gin.ReleaseMode)
 	s := gin.New()
 	s.Use(gin.Recovery())
 	s.Use(middlewareCors())
+	s.Use(middlewareAuthKey(key))
 	if log != "" {
 		s.Use(gin.Logger())
 	}
@@ -28,6 +29,19 @@ func engine(eth, disk, log string) *gin.Engine {
 
 // 路由规则
 func wrapApi(s *gin.Engine, eth, disk, log string) {
+	// 整合接口
+	s.POST("/api/comb", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": Combination{
+			ServerInfo:   getServerInfo(),
+			CPUInfo:      getCPUInfo(),
+			MemInfo:      getMemInfo(),
+			KernelInfo:   getKernelData(),
+			NetInfo:      getNetInfo(eth),
+			DiskInfo:     getDiskInfo(disk),
+			ProgressInfo: getProgressData(),
+		}})
+	})
+
 	s.POST("/api/cpu", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": getCPUInfo()})
 	})

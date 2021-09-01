@@ -7,6 +7,17 @@ Author: Landers
 package main
 
 // 对象结构体定义
+
+type Combination struct {
+	ServerInfo string `json:"server_info"`
+	CPUInfo CPUInfo `json:"cpu_info"`
+	MemInfo MemInfo `json:"mem_info"`
+	KernelInfo KernelInfo `json:"kernel_info"`
+	NetInfo NetInfo `json:"net_info"`
+	DiskInfo DiskInfo `json:"disk_info"`
+	ProgressInfo ProgressInfo `json:"progress_info"`
+}
+
 // CPUInfo 结构体定义
 type CPUInfo struct {
 	CpuUsage string `json:"cpu_usage"`

@@ -29,3 +29,19 @@ func middlewareCors() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+// 通信密钥中间件仅在key参数存在时使用
+func middlewareAuthKey(key string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Request.Header.Get("token")
+		if key != "" {
+			if token != key {
+				c.JSON(http.StatusForbidden, "key error")
+				c.AbortWithStatus(http.StatusForbidden)
+			}
+			c.Next()
+		} else {
+			c.Next()
+		}
+	}
+}

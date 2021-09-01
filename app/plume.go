@@ -21,9 +21,10 @@ func main() {
 	port := flag.Int("port", 5000, "set port")
 	host := flag.String("host", "127.0.0.1", "set host")
 	log := flag.String("log", "", "set log file path")
+	key := flag.String("key", "", "set key")
 
 	flag.Parse()
-	app := engine(*eth, *disk, *log)
+	app := engine(*eth, *disk, *log, *key)
 	fmt.Printf("running at %s:%d\n", *host, *port)
 	e := app.Run(fmt.Sprintf("%s:%d", *host, *port))
 	if e != nil {

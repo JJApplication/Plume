@@ -21,6 +21,6 @@ func getServerInfo() string {
 	if e != nil {
 		return ""
 	}else {
-		return strings.Trim(string(res), "\\n\\l")
+		return strings.Trim(string(res), "\n\\n\\l\t\\t")
 	}
 }

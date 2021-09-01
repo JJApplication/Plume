@@ -212,7 +212,7 @@ func getNetInfo(eth string) NetInfo {
 	var out2, re2 string
 	c := make(chan string, 2)
 	go func() {
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Millisecond * 200)
 		sh := "netstat -s -t | grep \"segments sent out\" | awk '{print $1}'"
 		cmd := exec.Command("bash", "-c", sh)
 		o, _ := cmd.Output()
@@ -228,7 +228,7 @@ func getNetInfo(eth string) NetInfo {
 	out2 = <-c
 	re2 = <-c
 
-	net.NetRetry = calcRetrans(string(out1), string(out2), string(re1), string(re2), 1000)
+	net.NetRetry = calcRetrans(string(out1), string(out2), string(re1), string(re2), 200)
 
 
 	return net
