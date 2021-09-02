@@ -25,9 +25,16 @@ type CPUInfo struct {
 	CpuUsageUser string `json:"cpu_usage_user"`
 	CpuIOWait string `json:"cpu_io_wait"`
 	CpuCount string `json:"cpu_count"`
+	CpuPhysical string `json:"cpu_physical"`
 	CpuFree string `json:"cpu_free"`
 	CpuLoad string `json:"cpu_load"`
 	CpuRun string `json:"cpu_run"`
+}
+
+type CPUInfoDetail struct {
+	Info string `json:"info"`
+	Freq string `json:"freq"`
+	Cache string `json:"cache"`
 }
 
 type MemInfo struct {
@@ -35,6 +42,14 @@ type MemInfo struct {
 	MemUsed string `json:"mem_used"`
 	MemFree string `json:"mem_free"`
 	MemCache string `json:"mem_cache"`
+}
+
+type MemInfoDetail struct {
+	ManuFacturer string `json:"manufacturer"`
+	Product string `json:"product"`
+	Size string `json:"size"`
+	Speed string `json:"speed"`
+	Width string `json:"width"`
 }
 
 type KernelInfo struct {
@@ -68,7 +83,14 @@ type NetInfo struct {
 	NetFail string `json:"net_fail"`
 	IPV4 string `json:"ipv4"`
 	IPV6 string `json:"ipv6"`
+}
 
+type NetInfoDetail struct {
+	ID string `json:"id"`
+	State string `json:"state"`
+	R string `json:"r"`
+	S string `json:"s"`
+	Address string `json:"address"`
 }
 
 // DiskInfo 磁盘信息使用iostat
@@ -83,6 +105,12 @@ type DiskInfo struct {
 	DiskWriteRate string `json:"disk_write_rate"`
 	DiskWriteByte string `json:"disk_write_byte"`
 	DiskWriteDelay string `json:"disk_write_delay"`
+}
+
+type DiskInfoDetail struct {
+	Label string `json:"label"`
+	Model string `json:"model"`
+	List []map[string]string `json:"list"`
 }
 
 // Containers 容器列表

@@ -6,7 +6,7 @@
             <div id="data-server-title">
                 <p>{{server}}</p>
             </div>
-            <div class="cell">
+            <div class="cell" @click="open_cpu_info">
                 <p class="cell-title">负载</p>
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
                     <van-col span="6" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
@@ -67,8 +67,21 @@
                     </van-col>
                 </van-row>
             </div>
+            <!--     配套的cpu详情      -->
+            <van-action-sheet v-model:show="show_cpu" title="CPU详情" style="padding: 10px 0" @closed="closeLoading">
+                <div class="content" style="padding: 0 10px;text-align: left">
+                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                    <van-cell-group inset v-show="!sheet_loading">
+                        <van-cell title="型号" :value="cpu_info.info"/>
+                        <van-cell title="核心数" :value="cpu_count"/>
+                        <van-cell title="逻辑核心" :value="cpu_physical"/>
+                        <van-cell title="频率" :value="cpu_info.freq"/>
+                        <van-cell title="缓存" :value="cpu_info.cache"/>
+                    </van-cell-group>
+                </div>
+            </van-action-sheet>
 
-            <div class="cell">
+            <div class="cell" @click="open_mem_info">
                 <p class="cell-title">内存</p>
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
                     <van-col span="6" class="cell-head cell-head-mem">{{ mem_usage }} %</van-col>
@@ -92,6 +105,19 @@
                     </van-col>
                 </van-row>
             </div>
+            <!--     配套的mem详情      -->
+            <van-action-sheet v-model:show="show_mem" title="内存详情" style="padding: 10px 0" @closed="closeLoading">
+                <div class="content" style="padding: 0 10px;text-align: left">
+                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                    <van-cell-group inset v-show="!sheet_loading">
+                        <van-cell title="厂商" :value="mem_info.manufacturer"/>
+                        <van-cell title="型号" :value="mem_info.product"/>
+                        <van-cell title="容量" :value="mem_info.size"/>
+                        <van-cell title="频率" :value="mem_info.speed"/>
+                        <van-cell title="带宽" :value="mem_info.width"/>
+                    </van-cell-group>
+                </div>
+            </van-action-sheet>
 
             <div class="cell"  @click="show_progress = true">
                 <p class="cell-title">进程</p>
@@ -136,8 +162,9 @@
                 </van-row>
             </div>
             <!--配套的进程详情-->
-            <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0">
-                <div class="content" style="padding: 0 10px;text-align: left">
+            <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0" @closed="closeLoading">
+                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
                     <van-row gutter="20" justify="center" style="margin-top: .2rem">
                         <van-col span="4">
                             <span class="bold" style="margin-right: 16px;font-weight: bold">PID</span>
@@ -155,18 +182,18 @@
                     <div v-for="p in progress_list">
                         <van-row gutter="20" justify="center" style="margin-top: .2rem">
                             <van-col span="4">
-                                <span class="bold" style="margin-right: 16px;font-size: .9rem">{{ p.pid }}</span>
+                                <span class="bold" style="font-size: .9rem">{{ p.pid }}</span>
                             </van-col>
                             <van-col span="4">
-                                <span style="margin-right: 16px;font-size: .9rem">{{ p.cpu }}</span>
+                                <span style="font-size: .9rem">{{ p.cpu }}</span>
                             </van-col>
                             <van-col span="4">
-                                <span class="cell-head" style="margin-right: 16px;font-size: .9rem">{{ p.mem }}</span>
+                                <span class="cell-head" style="font-size: .9rem">{{ p.mem }}</span>
                             </van-col>
                             <van-col span="12">
                                 <span class="cell-head"
-                                      style="margin-right: 16px;
-                                      width: 90%;
+                                      style="
+                                      width: 96%;
                                       font-size: .9rem;
                                       overflow: hidden;
                                       text-overflow: ellipsis;
@@ -180,7 +207,7 @@
                 </div>
             </van-action-sheet>
 
-            <div class="cell">
+            <div class="cell" @click="open_net_info">
                 <p class="cell-title">网络IO</p>
                 <van-row gutter="10" justify="center" style="margin-top: .5rem">
                     <van-col span="6">
@@ -215,8 +242,8 @@
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
                     <van-col span="6">
                         <div>
-                            <span class="cell-head">重传率</span><br>
-                            <span class="cell-data">{{net_retry}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            <span class="cell-head">重传连接</span><br>
+                            <span class="cell-data">{{net_retry}}</span>
                         </div>
                     </van-col>
                     <van-col span="6">
@@ -242,8 +269,59 @@
                 <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv4</span> ⇌ {{ipv4}}</div>
                 <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv6</span> ⇌ {{ipv6}}</div>
             </div>
+            <!--     配套的net详情      -->
+            <van-action-sheet v-model:show="show_net" title="网络详情" style="padding: 10px 0" @closed="closeLoading">
+                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
+                    <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                        <van-col span="4">
+                            <span class="bold" style="font-weight: bold">ID</span>
+                        </van-col>
+                        <van-col span="4">
+                            <span style="font-weight: bold">状态</span>
+                        </van-col>
+                        <van-col span="4">
+                            <span class="cell-head" style="font-weight: bold">接收</span>
+                        </van-col>
+                        <van-col span="4">
+                            <span class="cell-head" style="font-weight: bold">发送</span>
+                        </van-col>
+                        <van-col span="8" align="center">
+                            <span class="cell-head" style="font-weight: bold">监听地址</span>
+                        </van-col>
+                    </van-row>
+                    <div v-for="n in net_info">
+                        <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                            <van-col span="4">
+                                <span class="bold" style="font-size: .9rem">{{ n.id }}</span>
+                            </van-col>
+                            <van-col span="4">
+                                <span style="font-size: .9rem">{{ n.state }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-size: .9rem">{{ n.r }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-size: .9rem">{{ n.s }}</span>
+                            </van-col>
+                            <van-col span="10">
+                                <span class="cell-head"
+                                      style="
+                                      width: 96%;
+                                      font-size: .9rem;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                      display: inline-block;
+                                      white-space: nowrap"
+                                      :title="n.address"
+                                >{{ n.address }}</span>
+                            </van-col>
+                        </van-row>
+                    </div>
+                </div>
+            </van-action-sheet>
 
-            <div class="cell">
+            <div class="cell" @click="open_disk_info">
                 <p class="cell-title">磁盘IO</p>
                 <van-row gutter="10" justify="center" style="margin-top: .5rem">
                     <van-col span="14">
@@ -292,6 +370,74 @@
                     </van-col>
                 </van-row>
             </div>
+            <!--     配套的disk详情      -->
+            <van-action-sheet v-model:show="show_disk" title="磁盘详情" style="padding: 10px 0" @closed="closeLoading">
+                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
+                    <van-cell-group inset>
+                        <van-cell title="分区表" :value="disk_info.label"/>
+                        <van-cell title="模型" :value="disk_info.model"/>
+                    </van-cell-group>
+                    <van-row gutter="20" justify="center" style="margin-top: .8rem">
+                        <van-col span="6">
+                            <span class="bold" style="font-weight: bold;font-size: .8rem">文件系统</span>
+                        </van-col>
+                        <van-col span="3">
+                            <span style="font-weight: bold;font-size: .8rem">大小</span>
+                        </van-col>
+                        <van-col span="3">
+                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">已用</span>
+                        </van-col>
+                        <van-col span="3">
+                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">可用</span>
+                        </van-col>
+                        <van-col span="3" align="center">
+                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">占比</span>
+                        </van-col>
+                        <van-col span="6" align="center">
+                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">挂载</span>
+                        </van-col>
+                    </van-row>
+                    <div v-for="d in disk_info.list">
+                        <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                            <van-col span="6">
+                                <span class="bold"
+                                      style="font-size: .9rem;
+                                      width: 96%;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                      display: inline-block;
+                                      white-space: nowrap"
+                                >{{ d.system }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span style="font-size: .9rem">{{ d.size }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-size: .9rem">{{ d.used }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-size: .9rem">{{ d.avail }}</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-size: .9rem">{{ d.use }}</span>
+                            </van-col>
+                            <van-col span="6">
+                                <span class="cell-head"
+                                      style="
+                                      width: 96%;
+                                      font-size: .9rem;
+                                      overflow: hidden;
+                                      text-overflow: ellipsis;
+                                      display: inline-block;
+                                      white-space: nowrap"
+                                      :title="d.mount"
+                                >{{ d.mount }}</span>
+                            </van-col>
+                        </van-row>
+                    </div>
+                </div>
+            </van-action-sheet>
         </div>
     </div>
 </template>
@@ -310,6 +456,8 @@ export default {
     data() {
       return {
           global_timer: null,
+          // 控制全局弹出框的显示
+          sheet_loading: true,
 
           server: 'Ubuntu 20.04LTS',
           cpu_usage: 0,
@@ -317,18 +465,24 @@ export default {
           cpu_usage_user: 0,
           cpu_io_wait: 0,
           cpu_count: 2,
+          cpu_physical: 4,
           cpu_free: 0,
           cpu_run: 0,
           cpu_load: '0,0,0',
+          show_cpu: false,
+          cpu_info: {},
 
           mem_usage: '10.00',
           mem_free: 0,
           mem_used: 0,
           mem_cache: 0,
+          show_mem: false,
+          mem_info: {},
 
           kernel_os: 'linux',
           kernel_type: 'x86_64',
           kernel_version: 'unknown version',
+
           progress_all: 0,
           progress_run: 0,
           progress_dead: 0,
@@ -348,6 +502,8 @@ export default {
           net_fail: 0,
           ipv4: '127.0.0.1',
           ipv6: '::1',
+          show_net: false,
+          net_info: {},
 
           disk_mount: '/dev/vda1',
           disk_used: '0G',
@@ -358,7 +514,9 @@ export default {
           disk_read_byte: 0,
           disk_write_byte: 0,
           disk_read_delay: 0,
-          disk_write_delay: 0
+          disk_write_delay: 0,
+          show_disk: false,
+          disk_info: {}
       }
     },
     watch: {
@@ -381,6 +539,8 @@ export default {
                   this.getCombinationData();
                   if (this.show_progress) {
                       this.getProgressListData();
+                  } else if (this.show_net) {
+                      this.getNetInfo();
                   }
               }else {
                   this.getServerData();
@@ -392,6 +552,8 @@ export default {
                   this.getDiskData();
                   if (this.show_progress) {
                       this.getProgressListData();
+                  } else if (this.show_net) {
+                      this.getNetInfo();
                   }
               }
           }else {
@@ -438,14 +600,14 @@ export default {
               bar.style.height = height + '%';
           }
       },
-      calcLoad(load, cpu_count) {
+      calcLoad(load, cpu_count, cpu_physical) {
           let m1 = document.getElementById("m1");
           let m5 = document.getElementById("m5");
           let m15 = document.getElementById("m15");
 
           let loads = load.split(" ");
           if (m1) {
-              let height = loads[0] * 100 / cpu_count / 2;
+              let height = loads[0] * 100 * cpu_count / cpu_physical;
               height = Math.floor(height);
               if (height >= 100) {
                   height = 100;
@@ -454,7 +616,7 @@ export default {
               m1.style.height = height + '%';
           }
           if (m5) {
-              let height = loads[1] * 100 / cpu_count / 2;
+              let height = loads[1] * 100 * cpu_count / cpu_physical;
               height = Math.floor(height);
               if (height >= 100) {
                   height = 100;
@@ -463,7 +625,7 @@ export default {
               m5.style.height = height + '%';
           }
           if (m15) {
-              let height = loads[2] * 100 / cpu_count / 2;
+              let height = loads[2] * 100 * cpu_count / cpu_physical;
               height = Math.floor(height);
               if (height >= 100) {
                   height = 100;
@@ -475,6 +637,10 @@ export default {
       // 告警提示
       notifyDanger(message) {
           this.$notify({ type: 'danger', message: message });
+      },
+      // 重新开启全局加载动画
+      closeLoading() {
+          this.sheet_loading = true;
       },
       // 服务器信息
       getServerData() {
@@ -498,16 +664,30 @@ export default {
             this.cpu_usage_user = data.cpu_usage_user;
             this.cpu_io_wait = data.cpu_io_wait;
             this.cpu_count = data.cpu_count;
+            this.cpu_physical = data.cpu_physical;
             this.cpu_free = data.cpu_free;
             this.cpu_load = data.cpu_load;
             this.cpu_run = data.cpu_run;
 
-            this.calcLoad(this.cpu_load, this.cpu_count);
+            this.calcLoad(this.cpu_load, this.cpu_count, this.cpu_physical);
         }).catch((e) => {
             if (e.response.data !== "key error") {
                 this.notifyDanger("接口" + apis.api_cpu + "请求失败");
             }
         });
+      },
+      getCPUInfo() {
+          this.$axios.post(apis.api_cpu_info)
+          .then(res=>{
+              this.cpu_info = res.data.data;
+              this.sheet_loading = false;
+          })
+      },
+      // 打开详情栏 清空原始数据
+      open_cpu_info() {
+          this.show_cpu = true;
+          this.sheet_loading = true;
+          this.getCPUInfo();
       },
       // 获取内存信息
       getMemData() {
@@ -523,6 +703,18 @@ export default {
                   this.notifyDanger("接口" + apis.api_mem + "请求失败");
               }
           });
+      },
+      getMemInfo() {
+          this.$axios.post(apis.api_mem_info)
+              .then(res=>{
+                  this.mem_info = res.data.data;
+                  this.sheet_loading = false;
+              })
+      },
+      open_mem_info() {
+          this.show_mem = true;
+          this.sheet_loading = true;
+          this.getMemInfo();
       },
       getNetData() {
           this.$axios.post(apis.api_net)
@@ -544,6 +736,18 @@ export default {
                   this.notifyDanger("接口" + apis.api_net + "请求失败");
               }
           });
+      },
+      getNetInfo() {
+          this.$axios.post(apis.api_net_info + "?num=" + this.$store.state.progress)
+              .then(res=>{
+                  this.net_info = res.data.data;
+                  this.sheet_loading = false;
+              })
+      },
+      open_net_info() {
+            this.show_net = true;
+            this.sheet_loading = true;
+            this.getNetInfo();
       },
       getDiskData() {
           this.$axios.post(apis.api_disk)
@@ -567,6 +771,18 @@ export default {
               }
           });
       },
+        getDiskInfo() {
+            this.$axios.post(apis.api_disk_info)
+                .then(res=>{
+                    this.disk_info = res.data.data;
+                    this.sheet_loading = false;
+                })
+        },
+        open_disk_info() {
+            this.show_disk = true;
+            this.sheet_loading = true;
+            this.getDiskInfo();
+        },
         getKernelData() {
             this.$axios.post(apis.api_kernel)
                 .then(res => {
@@ -599,6 +815,7 @@ export default {
           this.$axios.post(apis.api_progress_list + "?num=" + this.$store.state.progress)
               .then(res => {
                   this.progress_list = res.data.data;
+                  this.sheet_loading = false;
               }).catch((e) => {
               if (e.response.data !== "key error") {
                   this.notifyDanger("接口" + apis.api_progress_list + "请求失败");
@@ -746,6 +963,16 @@ export default {
     .cell-head.cell-head-cpu {
         font-size: 1.6rem;
     }
+    @media (max-width: 580px) {
+        .cell-head.cell-head-cpu {
+            font-size: 1.4rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .cell-head.cell-head-cpu {
+            font-size: 1.3rem;
+        }
+    }
     .cell-head.cell-head-mem {
         font-size: 1.6rem;
     }
@@ -850,5 +1077,18 @@ export default {
     }
     .home /deep/ .van-action-sheet {
         color: var(--light-text-color, #a0a0a0);
+    }
+    .home /deep/ .van-cell-group, .van-calendar {
+        background-color: var(--light-bg-color, #202020);
+    }
+    .home /deep/ .van-cell {
+        background-color: var(--light-bg-color, #202020);
+        color: var(--light-text-color, #a0a0a0);
+    }
+    .home /deep/ .van-cell::after {
+        border-bottom-color: var(--light-line-border-color, #707070);
+    }
+    .home /deep/ .van-hairline--top-bottom::after, .van-hairline-unset--top-bottom::after {
+        border: none;
     }
 </style>

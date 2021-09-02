@@ -9,17 +9,15 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"os/exec"
 	"strings"
 )
 
 // 获取磁盘信息
-func getDiskInfo(d string) DiskInfo {
+func getDiskInfo(d string, debug bool) DiskInfo {
 	var disk DiskInfo
 	// Size  Used Use%
 	sh := "df -hl / | awk 'NR==2{print $1, $2, $3, $5}'"
-	cmd := exec.Command("bash", "-c", sh)
-	res, e := cmd.Output()
+	res, e := cmdRun(sh, debug)
 	disk_info := strings.Fields(string(res))
 
 	if e != nil || len(disk_info) < 4 {
@@ -61,8 +59,7 @@ func getDiskInfo(d string) DiskInfo {
 
 	// 读速率 读延迟 写速率k/s 写延迟
 	var td stat
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	res, e = cmdRun(sh, debug)
 
 	e = json.Unmarshal(res, &td)
 
@@ -87,8 +84,8 @@ func getDiskInfo(d string) DiskInfo {
 	}else {
 		sh = "iostat -d -o JSON"
 	}
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+
+	res, e = cmdRun(sh, debug)
 
 	var t stat
 	e = json.Unmarshal(res, &t)
@@ -104,5 +101,49 @@ func getDiskInfo(d string) DiskInfo {
 		disk.DiskWriteByte = calcByte(writeByte)
 	}
 
+	return disk
+}
+
+func getDiskInfoDetail(debug bool) DiskInfoDetail {
+	var disk DiskInfoDetail
+
+	sh := "fdisk -l|grep Disklabel"
+	res, e := cmdRun(sh, debug)
+	if e != nil {
+		disk.Label = "unknown"
+	} else {
+		disk.Label = strings.Split(string(res), ":")[1]
+	}
+
+	sh = "fdisk -l|grep 'model'"
+	res, e = cmdRun(sh, debug)
+	if e != nil {
+		disk.Model = "unknown"
+	} else {
+		disk.Model = strings.Split(string(res), ":")[1]
+	}
+
+	sh = "df -h|grep -v Filesystem|tr '\n' ','"
+	res, e = cmdRun(sh, debug)
+	if e != nil {
+		disk.List = []map[string]string{}
+	} else {
+		var d []map[string]string
+		data := strings.Split(string(res), ",")
+		for _, di := range data {
+			dis := strings.Fields(di)
+			if len(dis) >= 6 {
+				d = append(d, map[string]string{
+					"system": dis[0],
+					"size": dis[1],
+					"used": dis[2],
+					"avail": dis[3],
+					"use": dis[4],
+					"mount": dis[5],
+				})
+			}
+		}
+		disk.List = d
+	}
 	return disk
 }

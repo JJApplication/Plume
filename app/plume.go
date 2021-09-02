@@ -12,10 +12,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"runtime"
 )
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	// 处理命令行
+	debug := flag.Bool("debug", false, "enable debug")
 	eth := flag.String("eth", "eth0", "set eth")
 	disk := flag.String("disk", "", "set disk")
 	port := flag.Int("port", 5000, "set port")
@@ -24,7 +27,7 @@ func main() {
 	key := flag.String("key", "", "set key")
 
 	flag.Parse()
-	app := engine(*eth, *disk, *log, *key)
+	app := engine(*eth, *disk, *log, *key, *debug)
 	fmt.Printf("running at %s:%d\n", *host, *port)
 	e := app.Run(fmt.Sprintf("%s:%d", *host, *port))
 	if e != nil {

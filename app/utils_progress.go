@@ -9,17 +9,15 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os/exec"
 	"strings"
 )
 
 // 进程函数
-func getProgressData() ProgressInfo {
+func getProgressData(debug bool) ProgressInfo {
 	var pro ProgressInfo
 
 	sh := "ps ax | wc -l"
-	cmd := exec.Command("bash", "-c", sh)
-	res, e := cmd.Output()
+	res, e := cmdRun(sh, debug)
 	if e != nil {
 		pro.ProgressAll = "0"
 	} else {
@@ -27,8 +25,7 @@ func getProgressData() ProgressInfo {
 	}
 
 	sh = "ps ax | awk '{print $3}' | grep R | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		pro.ProgressRun = "0"
 	} else {
@@ -36,8 +33,7 @@ func getProgressData() ProgressInfo {
 	}
 
 	sh = "ps ax | awk '{print $3}' | grep Z | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		pro.ProgressDead = "0"
 	} else {
@@ -45,8 +41,7 @@ func getProgressData() ProgressInfo {
 	}
 
 	sh = "ps ax | awk '{print $3}' | grep S | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		pro.ProgressSleep = "0"
 	} else {
@@ -70,7 +65,7 @@ func fmtData(s string) (ProgressListInfo, error) {
 	}, nil
 }
 
-func getProgressListData(num string) []ProgressListInfo {
+func getProgressListData(num string, debug bool) []ProgressListInfo {
 	var pro []ProgressListInfo
 
 	if num == "" {
@@ -78,8 +73,7 @@ func getProgressListData(num string) []ProgressListInfo {
 	}
 
 	sh := fmt.Sprintf("ps aux | grep -v PID | awk '{print $2, $3, $4, $11}' | sort -rn -k +3 | head -n %s | tr '\n' ','", num)
-	cmd := exec.Command("bash", "-c", sh)
-	res, e := cmd.Output()
+	res, e := cmdRun(sh, debug)
 	if e != nil {
 		return []ProgressListInfo{}
 	}

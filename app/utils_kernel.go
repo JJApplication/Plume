@@ -7,16 +7,14 @@ Author: Landers
 package main
 
 import (
-	"os/exec"
 	"strings"
 )
 
-func getKernelData() KernelInfo {
+func getKernelData(debug bool) KernelInfo {
 	var k KernelInfo
 
 	sh := "uname -r -i"
-	cmd := exec.Command("bash", "-c", sh)
-	res, e := cmd.Output()
+	res, e := cmdRun(sh, debug)
 	if e != nil {
 		return k
 	}
@@ -27,8 +25,7 @@ func getKernelData() KernelInfo {
 	}
 
 	sh = "lsb_release -d|sed 's/'$(lsb_release -d|awk '{print $1}')'//g'"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		k.KernelOs = "linux"
 	} else {

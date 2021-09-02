@@ -19,6 +19,20 @@ npm run serve
 npm run build
 ```
 
+## 依赖
+
+本服务尽量使用linux自带的命令获取系统信息
+
+对于一些特殊需求，需要安装额外的程序
+
+对于ubuntu
+
+```bash
+apt install sysstat
+```
+
+
+
 ## 示例
 
 ![](demo/demo1.png)
@@ -30,3 +44,9 @@ npm run build
 **同时支持暗黑模式切换**
 
 ![](demo/demo4.png)
+
+![](demo/demo5.png)
+
+![](demo/demo6.png)
+
+![](demo/demo7.png)

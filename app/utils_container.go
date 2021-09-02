@@ -7,7 +7,7 @@ Author: Landers
 package main
 
 // 容器接口代理请求
-func getContainers() []Containers {
+func getContainers(debug bool) []Containers {
 	var containers []Containers
 
 	return containers

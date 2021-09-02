@@ -9,7 +9,6 @@ package main
 import (
 	"fmt"
 	"math"
-	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -112,12 +111,11 @@ func calcRetrans(send1, send2 string, r1, r2 string, offset int) string {
 }
 
 // 获取网络信息
-func getNetInfo(eth string) NetInfo {
+func getNetInfo(eth string, debug bool) NetInfo {
 	var net NetInfo
 	// 获取ip地址
 	sh := fmt.Sprintf("ifconfig %s | grep inet | awk '{print $2}' | tr '\n' ' '", eth)
-	cmd := exec.Command("bash", "-c", sh)
-	res, e := cmd.Output()
+	res, e := cmdRun(sh, debug)
 	net_info := strings.Fields(string(res))
 
 	if e != nil || len(net_info) < 1 {
@@ -135,8 +133,7 @@ func getNetInfo(eth string) NetInfo {
 
 	// 获取网络流量
 	sh = fmt.Sprintf("ifconfig %s | grep \"RX packets\" | awk '{print $5}'", eth)
-	cmd = exec.Command("bash", "-c", sh)
-	rx, e := cmd.Output()
+	rx, e := cmdRun(sh, debug)
 	if e != nil {
 		net.NetWorkDownload = "0"
 	} else {
@@ -144,8 +141,7 @@ func getNetInfo(eth string) NetInfo {
 	}
 
 	sh = fmt.Sprintf("ifconfig %s | grep \"TX packets\" | awk '{print $5}'", eth)
-	cmd = exec.Command("bash", "-c", sh)
-	tx, e := cmd.Output()
+	tx, e := cmdRun(sh, debug)
 	if e != nil {
 		net.NetWorkUpload = "0"
 	} else {
@@ -153,47 +149,30 @@ func getNetInfo(eth string) NetInfo {
 	}
 
 	// 获取网络速率 (200ms计算)
-	time.Sleep(time.Millisecond * 200)
-	sh = fmt.Sprintf("ifconfig %s | grep \"RX packets\" | awk '{print $5}'", eth)
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
-	if e != nil {
-		net.NetDownload = "0"
-	} else {
-		net.NetDownload = calcNetRate(string(rx), string(res), 200)
-	}
+	net.NetDownload, net.NetUpload = calcNetworkRate(eth, debug)
 
-	sh = fmt.Sprintf("ifconfig %s | grep \"TX packets\" | awk '{print $5}'", eth)
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
-	if e != nil {
-		net.NetUpload = "0"
-	} else {
-		net.NetUpload = calcNetRate(string(tx), string(res), 200)
-	}
-
-	// 获取建连信息
-	sh = "netstat -na | grep ESTABLISHED | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	// 获取建连信息  为提升效率使用ss
+	//sh = "netstat -na | grep ESTABLISHED | wc -l"
+	sh = "ss -a | grep ESTAB | wc -l"
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		net.NetActive = "0"
 	} else {
 		net.NetActive = strings.Trim(string(res), "\n")
 	}
 
-	sh = "netstat -na | grep LISTEN | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	//sh = "netstat -na | grep LISTEN | wc -l"
+	sh = "ss -a | grep LISTEN | wc -l"
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		net.NetPassive = "0"
 	} else {
 		net.NetPassive = strings.Trim(string(res), "\n")
 	}
 
-	sh = "netstat -na | grep TIME_WAIT | wc -l"
-	cmd = exec.Command("bash", "-c", sh)
-	res, e = cmd.Output()
+	//sh = "netstat -na | grep TIME_WAIT | wc -l"
+	sh = "ss -a | grep UNCONN | wc -l"
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		net.NetFail = "0"
 	} else {
@@ -201,35 +180,101 @@ func getNetInfo(eth string) NetInfo {
 	}
 
 	// 重传计算
-	sh = "netstat -s -t | grep \"segments sent out\" | awk '{print $1}'"
-	cmd = exec.Command("bash", "-c", sh)
-	out1, _ := cmd.Output()
-
+	//sh = "netstat -s -t | grep \"segments sent out\" | awk '{print $1}'"
 	sh = "netstat -s -t | grep \"segments retransmitted\" | awk '{print $1}'"
-	cmd = exec.Command("bash", "-c", sh)
-	re1, _ := cmd.Output()
+	res, _ = cmdRun(sh, debug)
+	net.NetRetry = strings.Trim(string(res), "\n")
 
-	var out2, re2 string
-	c := make(chan string, 2)
+	return net
+}
+
+// 轮询计算网速
+// 规则 20ms 循环10次 取平均值
+// 使用goroutine同时计算上传和下载
+func calcNetworkRate(eth string, debug bool) (string, string) {
+	shDown := fmt.Sprintf("ifconfig %s | grep \"RX packets\" | awk '{print $5}'", eth)
+	shUp := fmt.Sprintf("ifconfig %s | grep \"TX packets\" | awk '{print $5}'", eth)
+
+	chU := make(chan int)
+	chD := make(chan int)
+
 	go func() {
-		time.Sleep(time.Millisecond * 200)
-		sh := "netstat -s -t | grep \"segments sent out\" | awk '{print $1}'"
-		cmd := exec.Command("bash", "-c", sh)
-		o, _ := cmd.Output()
+		var total int
+		for i:=0; i<10; i++ {
+			res, _ := cmdRun(shDown, debug)
+			byte1, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
+			time.Sleep(time.Millisecond * 20)
+			res, _ = cmdRun(shDown, debug)
+			byte2, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
 
-		sh = "netstat -s -t | grep \"segments retransmitted\" | awk '{print $1}'"
-		cmd = exec.Command("bash", "-c", sh)
-		r, _ := cmd.Output()
+			byteDownLoad := byte2 - byte1
+			total += byteDownLoad
+		}
 
-		c<-string(o)
-		c<-string(r)
-
+		chD<-total
 	}()
-	out2 = <-c
-	re2 = <-c
 
-	net.NetRetry = calcRetrans(string(out1), string(out2), string(re1), string(re2), 200)
+	go func() {
+		var total int
+		for i:=0; i<10; i++ {
+			res, _ := cmdRun(shUp, debug)
+			byte1, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
+			time.Sleep(time.Millisecond * 20)
+			res, _ = cmdRun(shUp, debug)
+			byte2, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
 
+			byteUpload := byte2 - byte1
+			total += byteUpload
+		}
+
+		chU<-total
+	}()
+
+	download := <-chD
+	upload := <-chU
+
+
+	return calcByteAll(download), calcByteAll(upload)
+}
+
+func calcByteAll(data int) string {
+	gb := data / (1024*1024*1024)
+	mb := data / (1024*1024)
+	kb := data / 1024
+
+	if gb >= 1 {
+		return fmt.Sprintf("%dgb", gb)
+	} else if mb >= 1 {
+		return fmt.Sprintf("%dmb", mb)
+	} else if kb >= 1 {
+		return fmt.Sprintf("%dkb", kb)
+	} else {
+		return fmt.Sprintf("%db", data)
+	}
+}
+
+func getNetInfoDetail(num string, debug bool) []NetInfoDetail {
+	// Netid State Recv-Q Send-Q                   Local Address:Port     Peer Address:Port
+	var net []NetInfoDetail
+	sh := fmt.Sprintf("ss -txu  | grep -v Netid |sort -rk 3| head -n %s|awk '{print $1, $2, $3, $4, $5}'|tr '\n' ','", num)
+	res, e := cmdRun(sh, debug)
+	if e != nil {
+		return []NetInfoDetail{}
+	}
+
+	d := strings.Split(string(res), ",")
+	for _, n := range d {
+		ni := strings.Fields(n)
+		if len(ni) >= 5 {
+			net = append(net, NetInfoDetail{
+				ID: ni[0],
+				State: ni[1],
+				R: ni[2],
+				S: ni[3],
+				Address: ni[4],
+			})
+		}
+	}
 
 	return net
 }
