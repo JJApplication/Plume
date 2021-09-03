@@ -69,17 +69,17 @@
             </div>
             <!--     配套的cpu详情      -->
             <van-action-sheet v-model:show="show_cpu" title="CPU详情" style="padding: 10px 0" @closed="closeLoading">
-                <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
-                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                    <van-cell-group inset v-show="!sheet_loading">
-                        <van-cell title="型号" :value="cpu_info.info"/>
-                        <van-cell title="核心数" :value="cpu_count"/>
-                        <van-cell title="逻辑核心" :value="cpu_physical"/>
-                        <van-cell title="频率" :value="cpu_info.freq"/>
-                        <van-cell title="缓存" :value="cpu_info.cache"/>
-                    </van-cell-group>
-                </div>
-            </van-action-sheet>
+                    <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
+                        <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                        <van-cell-group inset v-show="!sheet_loading">
+                            <van-cell title="型号" :value="cpu_info.info"/>
+                            <van-cell title="核心数" :value="cpu_count"/>
+                            <van-cell title="逻辑核心" :value="cpu_physical"/>
+                            <van-cell title="频率" :value="cpu_info.freq"/>
+                            <van-cell title="缓存" :value="cpu_info.cache"/>
+                        </van-cell-group>
+                    </div>
+                </van-action-sheet>
 
             <div class="cell" @click="open_mem_info">
                 <p class="cell-title">内存</p>
@@ -837,8 +837,9 @@ export default {
                     this.cpu_free = cpu_data.cpu_free;
                     this.cpu_load = cpu_data.cpu_load;
                     this.cpu_run = cpu_data.cpu_run;
+                    this.cpu_physical = cpu_data.cpu_physical;
 
-                    this.calcLoad(this.cpu_load, this.cpu_count);
+                    this.calcLoad(this.cpu_load, this.cpu_count, this.cpu_physical);
 
                     let mem_data = res.data.data.mem_info;
                     this.mem_usage = mem_data.mem_usage;
@@ -1077,9 +1078,6 @@ export default {
     }
     .home /deep/ .van-action-sheet {
         color: var(--light-text-color, #a0a0a0);
-        max-width: 760px;
-        left: 50%;
-        transform: translateX(-50%);
     }
     .home /deep/ .van-cell-group, .van-calendar {
         background-color: var(--light-bg-color, #202020);
