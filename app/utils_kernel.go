@@ -24,12 +24,15 @@ func getKernelData(debug bool) KernelInfo {
 		return k
 	}
 
-	sh = "lsb_release -d|sed 's/'$(lsb_release -d|awk '{print $1}')'//g'"
+	// sh = "lsb_release -d|sed 's/'$(lsb_release -d|awk '{print $1}')'//g'"
+	sh = "lsb_release -d"
 	res, e = cmdRun(sh, debug)
+
 	if e != nil {
 		k.KernelOs = "linux"
 	} else {
-		k.KernelOs = checkOS(string(res))
+		des := strings.TrimLeft(strings.Split(string(res), ":")[1], " ")
+		k.KernelOs = checkOS(des)
 	}
 
 	k.KernelVersion = data[0]

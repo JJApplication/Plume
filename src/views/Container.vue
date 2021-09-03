@@ -17,8 +17,8 @@
                     <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
                         <p class="container-title">{{c.name}}</p>
                         <van-row justify="space-between" class="container-info">
-                            <van-col span="15"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
-                            <van-col span="6"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
+                            <van-col span="12"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
+                            <van-col span="9"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
                             <van-col span="3" align="center"><span style="font-weight: bold">状态</span><br>
                                 <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'stop'"/>
                                 <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exit'"/>

@@ -122,3 +122,9 @@ type Containers struct {
 	Status string `json:"status"`
 }
 
+// 缓存
+type cacheNet struct {
+	Download int
+	Upload int
+	UpdateTime int64
+}

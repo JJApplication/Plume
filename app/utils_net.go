@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+var cache cacheNet
+
 // 计算读写速率转换kb mb
 // 默认kb/s
 func calcRate(s interface{}) string {
@@ -132,51 +134,37 @@ func getNetInfo(eth string, debug bool) NetInfo {
 	}
 
 	// 获取网络流量
-	sh = fmt.Sprintf("ifconfig %s | grep \"RX packets\" | awk '{print $5}'", eth)
-	rx, e := cmdRun(sh, debug)
+	sh = fmt.Sprintf("ifconfig %s | grep -E \"RX packets|TX packets\" | awk '{print $5}' | tr '\n' ','", eth)
+	res, e = cmdRun(sh, debug)
 	if e != nil {
 		net.NetWorkDownload = "0"
-	} else {
-		net.NetWorkDownload = calcNet(string(rx))
-	}
-
-	sh = fmt.Sprintf("ifconfig %s | grep \"TX packets\" | awk '{print $5}'", eth)
-	tx, e := cmdRun(sh, debug)
-	if e != nil {
 		net.NetWorkUpload = "0"
 	} else {
-		net.NetWorkUpload = calcNet(string(tx))
+		d := strings.Split(string(res), ",")
+		if len(d) < 2 {
+			net.NetWorkDownload = "0"
+			net.NetWorkUpload = "0"
+		} else {
+			net.NetWorkDownload = calcNet(d[0])
+			net.NetWorkUpload = calcNet(d[1])
+		}
 	}
-
 	// 获取网络速率 (200ms计算)
 	net.NetDownload, net.NetUpload = calcNetworkRate(eth, debug)
 
 	// 获取建连信息  为提升效率使用ss
 	//sh = "netstat -na | grep ESTABLISHED | wc -l"
-	sh = "ss -a | grep ESTAB | wc -l"
+	sh = "ss -a | grep ESTAB | wc -l;ss -a | grep LISTEN | wc -l;ss -a | grep UNCONN | wc -l"
 	res, e = cmdRun(sh, debug)
 	if e != nil {
 		net.NetActive = "0"
-	} else {
-		net.NetActive = strings.Trim(string(res), "\n")
-	}
-
-	//sh = "netstat -na | grep LISTEN | wc -l"
-	sh = "ss -a | grep LISTEN | wc -l"
-	res, e = cmdRun(sh, debug)
-	if e != nil {
 		net.NetPassive = "0"
-	} else {
-		net.NetPassive = strings.Trim(string(res), "\n")
-	}
-
-	//sh = "netstat -na | grep TIME_WAIT | wc -l"
-	sh = "ss -a | grep UNCONN | wc -l"
-	res, e = cmdRun(sh, debug)
-	if e != nil {
 		net.NetFail = "0"
 	} else {
-		net.NetFail = strings.Trim(string(res), "\n")
+		d := strings.Split(string(res), "\n")
+		net.NetActive = strings.Trim(d[0], "\n ")
+		net.NetPassive = strings.Trim(d[1], "\n ")
+		net.NetFail = strings.Trim(d[2], "\n ")
 	}
 
 	// 重传计算
@@ -191,7 +179,7 @@ func getNetInfo(eth string, debug bool) NetInfo {
 // 轮询计算网速
 // 规则 20ms 循环10次 取平均值
 // 使用goroutine同时计算上传和下载
-func calcNetworkRate(eth string, debug bool) (string, string) {
+func calcNetworkRateByLoop(eth string, debug bool) (string, string) {
 	shDown := fmt.Sprintf("ifconfig %s | grep \"RX packets\" | awk '{print $5}'", eth)
 	shUp := fmt.Sprintf("ifconfig %s | grep \"TX packets\" | awk '{print $5}'", eth)
 
@@ -237,6 +225,47 @@ func calcNetworkRate(eth string, debug bool) (string, string) {
 	return calcByteAll(download/10*1000/20), calcByteAll(upload/10*1000/20)
 }
 
+// 根据缓存时间计算网速
+func calcNetworkRate(eth string, debug bool) (string, string) {
+	var empty cacheNet
+
+	sh := fmt.Sprintf("ifconfig %s | grep -E \"RX packets|TX packets\" | awk '{print $5}' | tr '\n' ','", eth)
+	res, e := cmdRun(sh, debug)
+	if e != nil {
+		return "0", "0"
+	}
+
+	data := strings.Split(string(res), ",")
+	if len(data) < 2 {
+		return "0", "0"
+	}
+	download, _ := strconv.Atoi(strings.Trim(data[0], "\n\\n"))
+	upload, _ := strconv.Atoi(strings.Trim(data[1], "\n\\n"))
+	timeNow := time.Now().Unix()
+	offset := int(timeNow - cache.UpdateTime)
+
+	if offset <= 0 {
+		offset = 1
+	}
+	// 首次刷新缓存
+	if cache == empty {
+		cache.UpdateTime = timeNow
+		cache.Download = download
+		cache.Upload = upload
+		return "0", "0"
+	}
+
+	rateDownload := calcByteAll((download-cache.Download)/offset)
+	rateUpload := calcByteAll((upload-cache.Upload)/offset)
+
+	// cache it
+	cache.Download = download
+	cache.Upload = upload
+	cache.UpdateTime = timeNow
+
+	return rateDownload, rateUpload
+}
+
 func calcByteAll(data int) string {
 	gb := data / (1024*1024*1024)
 	mb := data / (1024*1024)
@@ -253,6 +282,7 @@ func calcByteAll(data int) string {
 	}
 }
 
+// 获取网络详情
 func getNetInfoDetail(num string, debug bool) []NetInfoDetail {
 	// Netid State Recv-Q Send-Q                   Local Address:Port     Peer Address:Port
 	var net []NetInfoDetail

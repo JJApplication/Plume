@@ -23,20 +23,30 @@ func equalZero(s string) string {
 func getCPUInfo(debug bool) CPUInfo {
 	var cpu CPUInfo
 	// 根据top获取占用情况
-	sh := "top -bn 1 -i -c | grep %Cpu | sed 's/%Cpu(s)://g'"
+	// sh := "top -bn 1 -i -c | grep %Cpu | sed 's/%Cpu(s)://g'"
+	// avg-cpu:  %user   %nice %system %iowait  %steal   %idle
+	sh := "iostat -c|awk 'NR==4{print $1,$2,$3,$4,$6}'"
 	res, e := cmdRun(sh, debug)
-	cpu_info := strings.Split(string(res), ",")
+	cpu_info := strings.Split(string(res), " ")
 
 	if e != nil || len(cpu_info) < 5 {
 		cpu.CpuUsage , cpu.CpuUsageSys , cpu.CpuUsageUser = "0", "0", "0"
 		cpu.CpuFree, cpu.CpuIOWait = "0", "0"
 	} else {
-		cpu_us := equalZero(strings.Fields(cpu_info[0])[0])
-		cpu_sy := equalZero(strings.Fields(cpu_info[1])[0])
-		cpu_free := equalZero(strings.Fields(cpu_info[3])[0])
+		// 替换使用top方式
+		//cpu_us := equalZero(strings.Fields(cpu_info[0])[0])
+		//cpu_sy := equalZero(strings.Fields(cpu_info[1])[0])
+		//cpu_free := equalZero(strings.Fields(cpu_info[3])[0])
+		//t, _ := strconv.Atoi(strings.Split(cpu_free, ".")[0])
+		//cpu_usage := strconv.Itoa(100 - t)
+		//cpu_io_wait := equalZero(strings.Fields(cpu_info[4])[0])
+
+		cpu_us := equalZero(cpu_info[0])
+		cpu_sy := equalZero(cpu_info[2])
+		cpu_free := equalZero(cpu_info[4])
 		t, _ := strconv.Atoi(strings.Split(cpu_free, ".")[0])
 		cpu_usage := strconv.Itoa(100 - t)
-		cpu_io_wait := equalZero(strings.Fields(cpu_info[4])[0])
+		cpu_io_wait := equalZero(cpu_info[3])
 
 		cpu.CpuUsage = cpu_usage
 		cpu.CpuUsageSys = cpu_sy

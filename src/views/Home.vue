@@ -9,14 +9,14 @@
             <div class="cell" @click="open_cpu_info">
                 <p class="cell-title">负载</p>
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="6" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
-                    <van-col span="6">
+                    <van-col span="8" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
+                    <van-col span="5">
                         <div>
                             <span class="cell-head-cpu-pre cell-head-cpu-system"></span><span class="cell-head">系统</span><br>
                             <span class="cell-data">{{cpu_usage_system}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
                         </div>
                     </van-col>
-                    <van-col span="6">
+                    <van-col span="5">
                         <div>
                             <span class="cell-head-cpu-pre cell-head-cpu-user"></span><span class="cell-head">用户</span><br>
                             <span class="cell-data">{{cpu_usage_user}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
@@ -84,14 +84,14 @@
             <div class="cell" @click="open_mem_info">
                 <p class="cell-title">内存</p>
                 <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="6" class="cell-head cell-head-mem">{{ mem_usage }} %</van-col>
-                    <van-col span="6">
+                    <van-col span="8" class="cell-head cell-head-mem">{{ mem_usage }} %</van-col>
+                    <van-col span="5">
                         <div>
                             <span class="cell-head">可用</span><br>
                             <span class="cell-data">{{mem_free}}</span>
                         </div>
                     </van-col>
-                    <van-col span="6">
+                    <van-col span="5">
                         <div>
                             <span class="cell-head">已用</span><br>
                             <span class="cell-data">{{mem_used}}</span>
@@ -572,19 +572,19 @@ export default {
           // 根据流量计算 换算规则G = 1024 * 1024 M=1024 K=1
           let download = 0;
           let upload = 0;
-          if (this.network_upload.indexOf("G")) {
+          if (this.network_upload.indexOf("G") !== -1) {
               upload = this.network_upload.replace("G", "") * 1024 * 1024;
-          } else if (this.network_upload.indexOf("M")) {
+          } else if (this.network_upload.indexOf("M") !== -1) {
               upload = this.network_upload.replace("M", "") * 1024;
-          } else if (this.network_upload.indexOf("K")) {
+          } else if (this.network_upload.indexOf("K") !== -1) {
               upload = this.network_upload.replace("K", "");
           }
 
-          if (this.network_download.indexOf("G")) {
+          if (this.network_download.indexOf("G") !== -1) {
               download = this.network_download.replace("G", "") * 1024 * 1024;
-          } else if (this.network_download.indexOf("M")) {
+          } else if (this.network_download.indexOf("M") !== -1) {
               download = this.network_download.replace("M", "") * 1024;
-          } else if (this.network_download.indexOf("K")) {
+          } else if (this.network_download.indexOf("K") !== -1) {
               download = this.network_download.replace("K", "");
           }
           this.network_percent = (download / (download + upload) * 100).toFixed(0);
@@ -963,39 +963,31 @@ export default {
     }
     .cell-head.cell-head-cpu {
         font-size: 1.6rem;
+        padding: 10px 0;
     }
-    @media (max-width: 580px) {
+    @media (max-width: 380px) {
         .cell-head.cell-head-cpu {
             font-size: 1.4rem;
-        }
-    }
-    @media (max-width: 480px) {
-        .cell-head.cell-head-cpu {
-            font-size: 1.3rem;
         }
     }
     .cell-head.cell-head-mem {
         font-size: 1.6rem;
+        padding: 10px 0;
     }
 
-    @media (max-width: 580px) {
+    @media (max-width: 460px) {
         .cell-head.cell-head-mem {
             font-size: 1.4rem;
         }
     }
-    @media (max-width: 540px) {
+    @media (max-width: 400px) {
         .cell-head.cell-head-mem {
             font-size: 1.2rem;
         }
     }
-    @media (max-width: 440px) {
-        .cell-head.cell-head-mem {
-            font-size: 1rem;
-        }
-    }
     @media (max-width: 380px) {
         .cell-head.cell-head-mem {
-            font-size: .85rem;
+            font-size: 1.1rem;
         }
     }
     .data-bar {

@@ -16,36 +16,26 @@ import (
 func getProgressData(debug bool) ProgressInfo {
 	var pro ProgressInfo
 
-	sh := "ps ax | wc -l"
+	sh := "ps ax | wc -l;ps ax | awk '{print $3}' | grep R | wc -l;ps ax | awk '{print $3}' | grep Z | wc -l;ps ax | awk '{print $3}' | grep S | wc -l"
 	res, e := cmdRun(sh, debug)
 	if e != nil {
 		pro.ProgressAll = "0"
-	} else {
-		pro.ProgressAll = strings.Trim(string(res), "\n")
-	}
-
-	sh = "ps ax | awk '{print $3}' | grep R | wc -l"
-	res, e = cmdRun(sh, debug)
-	if e != nil {
 		pro.ProgressRun = "0"
-	} else {
-		pro.ProgressRun = strings.Trim(string(res), "\n")
-	}
-
-	sh = "ps ax | awk '{print $3}' | grep Z | wc -l"
-	res, e = cmdRun(sh, debug)
-	if e != nil {
 		pro.ProgressDead = "0"
-	} else {
-		pro.ProgressDead = strings.Trim(string(res), "\n")
-	}
-
-	sh = "ps ax | awk '{print $3}' | grep S | wc -l"
-	res, e = cmdRun(sh, debug)
-	if e != nil {
 		pro.ProgressSleep = "0"
 	} else {
-		pro.ProgressSleep = strings.Trim(string(res), "\n")
+		d := strings.Split(string(res), "\n")
+		if len(d) < 4 {
+			pro.ProgressAll = "0"
+			pro.ProgressRun = "0"
+			pro.ProgressDead = "0"
+			pro.ProgressSleep = "0"
+		} else {
+			pro.ProgressAll = strings.Trim(d[0], "\n")
+			pro.ProgressRun = strings.Trim(d[1], "\n")
+			pro.ProgressDead = strings.Trim(d[2], "\n")
+			pro.ProgressSleep = strings.Trim(d[3], "\n")
+		}
 	}
 
 	return pro
