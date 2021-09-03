@@ -234,7 +234,7 @@ func calcNetworkRate(eth string, debug bool) (string, string) {
 	upload := <-chU
 
 
-	return calcByteAll(download), calcByteAll(upload)
+	return calcByteAll(download/10*1000/20), calcByteAll(upload/10*1000/20)
 }
 
 func calcByteAll(data int) string {

@@ -69,7 +69,7 @@
             </div>
             <!--     配套的cpu详情      -->
             <van-action-sheet v-model:show="show_cpu" title="CPU详情" style="padding: 10px 0" @closed="closeLoading">
-                <div class="content" style="padding: 0 10px;text-align: left">
+                <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
                     <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
                     <van-cell-group inset v-show="!sheet_loading">
                         <van-cell title="型号" :value="cpu_info.info"/>
@@ -107,7 +107,7 @@
             </div>
             <!--     配套的mem详情      -->
             <van-action-sheet v-model:show="show_mem" title="内存详情" style="padding: 10px 0" @closed="closeLoading">
-                <div class="content" style="padding: 0 10px;text-align: left">
+                <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
                     <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
                     <van-cell-group inset v-show="!sheet_loading">
                         <van-cell title="厂商" :value="mem_info.manufacturer"/>
@@ -164,7 +164,7 @@
             <!--配套的进程详情-->
             <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0" @closed="closeLoading">
                 <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
+                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
                     <van-row gutter="20" justify="center" style="margin-top: .2rem">
                         <van-col span="4">
                             <span class="bold" style="margin-right: 16px;font-weight: bold">PID</span>
@@ -272,7 +272,7 @@
             <!--     配套的net详情      -->
             <van-action-sheet v-model:show="show_net" title="网络详情" style="padding: 10px 0" @closed="closeLoading">
                 <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
+                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
                     <van-row gutter="20" justify="center" style="margin-top: .2rem">
                         <van-col span="4">
                             <span class="bold" style="font-weight: bold">ID</span>
@@ -373,7 +373,7 @@
             <!--     配套的disk详情      -->
             <van-action-sheet v-model:show="show_disk" title="磁盘详情" style="padding: 10px 0" @closed="closeLoading">
                 <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px;text-align: left" v-show="!sheet_loading">
+                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
                     <van-cell-group inset>
                         <van-cell title="分区表" :value="disk_info.label"/>
                         <van-cell title="模型" :value="disk_info.model"/>
@@ -1077,6 +1077,9 @@ export default {
     }
     .home /deep/ .van-action-sheet {
         color: var(--light-text-color, #a0a0a0);
+        max-width: 760px;
+        left: 50%;
+        transform: translateX(-50%);
     }
     .home /deep/ .van-cell-group, .van-calendar {
         background-color: var(--light-bg-color, #202020);
