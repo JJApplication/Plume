@@ -18,6 +18,7 @@ import (
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 	// 处理命令行
+	var c CmdArgs
 	debug := flag.Bool("debug", false, "enable debug")
 	eth := flag.String("eth", "eth0", "set eth")
 	disk := flag.String("disk", "", "set disk")
@@ -25,9 +26,21 @@ func main() {
 	host := flag.String("host", "127.0.0.1", "set host")
 	log := flag.String("log", "", "set log file path")
 	key := flag.String("key", "", "set key")
+	api := flag.String("api", "http://127.0.0.1:2375", "set docker api")
 
 	flag.Parse()
-	app := engine(*eth, *disk, *log, *key, *debug)
+
+	c = CmdArgs{
+		Debug:     *debug,
+		Host:      *host,
+		Port:      *port,
+		Log:       *log,
+		Key:       *key,
+		Eth:       *eth,
+		Disk:      *disk,
+		DockerAPI: *api,
+	}
+	app := engine(c)
 	fmt.Printf("running at %s:%d\n", *host, *port)
 	e := app.Run(fmt.Sprintf("%s:%d", *host, *port))
 	if e != nil {

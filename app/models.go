@@ -8,6 +8,17 @@ package main
 
 // 对象结构体定义
 
+type CmdArgs struct {
+	Debug bool
+	Host string
+	Port int
+	Log string
+	Key string
+	Eth string
+	Disk string
+	DockerAPI string
+}
+
 type Combination struct {
 	ServerInfo string `json:"server_info"`
 	CPUInfo CPUInfo `json:"cpu_info"`
@@ -114,12 +125,43 @@ type DiskInfoDetail struct {
 }
 
 // Containers 容器列表
+
+type ContainersRaw struct {
+	ID string
+	Image string
+	Created int64
+	Names interface{}
+	State string
+}
+
 type Containers struct {
 	ID string `json:"id"`
-	Name string `json:"name"`
+	Name interface{} `json:"name"`
 	Image string `json:"image"`
 	Date string `json:"date"`
 	Status string `json:"status"`
+}
+
+type ContainerRaw struct {
+	Name string
+	Config map[string]interface{}
+	Created string
+	HostConfig map[string]interface{}
+	State map[string]interface{}
+}
+
+type Container struct {
+	Name string `json:"name"`
+	Cmd interface{} `json:"cmd"`
+	Image interface{} `json:"image"`
+	User interface{} `json:"user"`
+	Volume interface{} `json:"volume"`
+	Port interface{} `json:"port"`
+	WrkDir interface{} `json:"wrkdir"`
+	Date string `json:"date"`
+	Status interface{} `json:"status"`
+	Cpu interface{} `json:"cpu"`
+	Mem interface{} `json:"mem"`
 }
 
 // 缓存

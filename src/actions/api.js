@@ -12,7 +12,14 @@ const apis = {
     api_kernel: '/kernel',
     api_progress: '/progress',
     api_progress_list: '/progress_list',
+    api_containers: '/containers',
     api_container: '/container',
+    api_container_start: '/container/start',
+    api_container_stop: '/container/stop',
+    api_container_restart: '/container/restart',
+    api_container_create: '/container/create',
+    api_container_delete: '/container/delete',
+
     api_log: '/log',
     api_log_del: '/log_del'
 }

@@ -31,7 +31,44 @@ npm run build
 apt install sysstat
 ```
 
+## 启动参数
 
+```bash
+# ./plume -h
+Usage of ./plume:
+  -api string
+        set docker api (default "http://127.0.0.1:2375")
+  -debug
+        enable debug
+  -disk string
+        set disk
+  -eth string
+        set eth (default "eth0")
+  -host string
+        set host (default "127.0.0.1")
+  -key string
+        set key
+  -log string
+        set log file path
+  -port int
+        set port (default 5000)
+```
+
+`debug` 调试模式，此模式下会输出路由日志和命令行日志
+
+`host` 设置监听的本地地址
+
+`port` 设置监听的端口
+
+`log` 并非写日志的参数 而是指定一个可读取的日志文件路径
+
+`key` 双方通信密钥 plume和plume-app使用相同密钥才能通信
+
+`eth` 指定要监控的网卡 默认eth0网卡， 使用`ifconfig`查看全部网卡
+
+`disk` 指定要监控的磁盘，使用`lsblk -d`方式查看全部磁盘
+
+`api` 指定docker api接口地址 不建议开放公共api而是直接由plume内部调用
 
 ## 示例
 
