@@ -164,6 +164,22 @@ type Container struct {
 	Mem interface{} `json:"mem"`
 }
 
+type ImagesRaw struct {
+	ID string
+	RepoTags []string
+	Created int64
+	Size int
+	Containers int
+}
+
+type Images struct {
+	ID string `json:"id"`
+	Tags []string `json:"tags"`
+	Date string `json:"date"`
+	Size string `json:"size"`
+	Containers int `json:"containers"`
+}
+
 // 缓存
 type cacheNet struct {
 	Download int

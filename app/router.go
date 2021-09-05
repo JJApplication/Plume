@@ -110,6 +110,10 @@ func wrapApi(s *gin.Engine, cmd CmdArgs) {
 		c.JSON(http.StatusOK, gin.H{"data": delContainer(c.Query("id"), cmd.DockerAPI)})
 	})
 
+	s.POST("/api/images", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": getImages(cmd.DockerAPI)})
+	})
+
 	s.POST("/api/log", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"data": getLogData(cmd.Log, cmd.Debug)})
 	})

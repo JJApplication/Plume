@@ -20,6 +20,7 @@ const apis = {
     api_container_create: '/container/create',
     api_container_delete: '/container/delete',
 
+    api_images: '/images',
     api_log: '/log',
     api_log_del: '/log_del'
 }

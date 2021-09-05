@@ -1,9 +1,14 @@
 <template>
     <div class="container">
-        <Header name="容器"></Header>
+        <Header name="容器" v-if="!image_type"></Header>
+        <Header name="镜像" v-if="image_type"></Header>
         <span id="create-btn"><font-awesome-icon icon="plus" @click="open_create"></font-awesome-icon></span>
-        <div class="docker-top">
-            <font-awesome-icon :icon="['fab', 'docker']"></font-awesome-icon>
+        <div class="docker-top" @click="show_images">
+            <font-awesome-icon :icon="['fab', 'docker']" v-if="!image_type"></font-awesome-icon>
+            <font-awesome-icon :icon="['fab', 'unsplash']" v-else></font-awesome-icon>
+            <font-awesome-icon icon="angle-right" style="padding: 0 10px"></font-awesome-icon>
+            <font-awesome-icon :icon="['fab', 'docker']" v-if="image_type"></font-awesome-icon>
+            <font-awesome-icon :icon="['fab', 'unsplash']" v-else></font-awesome-icon>
         </div>
         <van-notice-bar
             left-icon="info-o"
@@ -12,8 +17,8 @@
         />
         <div class="scroll">
             <van-skeleton title :row="6" :loading="!visible" style="margin-top: 2rem"/>
-            <van-empty description="容器功能将在后台支持Docker API时自动开启" image="network" v-show="!containers" />
-            <transition name="van-slide-down">
+            <van-empty description="容器功能将在后台支持Docker API时自动开启" image="network" v-show="!containers&&!images" />
+            <transition name="van-slide-down" v-if="!image_type">
                 <div v-show="visible" class="container-list">
                     <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
                         <p class="container-title">{{c.name && c.name.length == 1 ? c.name[0] : c.name}}</p>
@@ -25,6 +30,18 @@
                                 <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exited'"/>
                                 <font-awesome-icon icon="play" style="color: forestgreen" v-if="c.status !== 'paused' && c.status !== 'exited'"/>
                             </van-col>
+                        </van-row>
+                    </div>
+                </div>
+            </transition>
+            <transition name="van-slide-down" v-else>
+                <div v-show="visible" class="container-list">
+                    <div class="container-body" v-for="i in images" :key="i.id">
+                        <p class="container-title">{{i.tags[0]}}</p>
+                        <van-row justify="space-between" class="container-info">
+                            <van-col span="10"><span style="font-weight: bold">大小</span><br><span class="container-info-data">{{i.size}}</span></van-col>
+                            <van-col span="10"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{i.date}}</span></van-col>
+                            <van-col span="4"><span style="font-weight: bold">容器</span><br><span class="container-info-data">{{i.containers}}</span></van-col>
                         </van-row>
                     </div>
                 </div>
@@ -113,6 +130,7 @@ export default {
     components: {Header},
     data() {
         return {
+            image_type: false,
             visible: false,
             show_create: false,
             containers: [
@@ -138,6 +156,7 @@ export default {
                     status: 'start'
                 }
             ],
+            images: [{id: '0', tags: ['plume:latest'], size: '103579269', date: '2021-01-01', contaniers: 10}],
             container_name: '',
             container_user: '',
             container_image: '',
@@ -227,7 +246,6 @@ export default {
                 data.HostConfig = {"PortBindings": {}}
                 data.ExposedPorts = {}
                 let ports = this.container_ports.split(" ");
-                console.log(ports)
                 for(let p of ports) {
                     let pd = p.split(':')
                     let key = pd[1] + '/tcp'
@@ -248,7 +266,6 @@ export default {
             this.$axios.post(apis.api_container_create + "?name=" + this.container_name, data)
             .then(res=>{
                 let code = res.data.data;
-                console.log(code)
                 switch (code) {
                     case "201":
                         this.notifySuccess("容器创建成功");
@@ -323,6 +340,51 @@ export default {
             this.container_daemon = false;
             this.container_rm = true;
             this.final_cmd = '';
+        },
+        show_images() {
+            this.visible = false;
+            this.images = [];
+            this.containers = [];
+            this.image_type = !this.image_type;
+            if (this.image_type && (this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false)) {
+                this.$axios.post(apis.api_images)
+                    .then(res=>{
+                        this.images = res.data.data;
+                        this.visible = true;
+                    }).catch(()=>{
+                    this.notifyDanger("获取镜像列表失败")
+                });
+            } else if (!this.image_type && (this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false)) {
+                this.getContainers();
+            } else {
+                setTimeout(()=>{
+                    this.containers = [
+                        {
+                            id: '0',
+                            name: 'plume',
+                            image: 'landers1037/plume',
+                            date: '2021-01-01 12:00',
+                            status: 'exit'
+                        },
+                        {
+                            id: '1',
+                            name: 'plume',
+                            image: 'landers1037/plume',
+                            date: '2021-01-01 12:00',
+                            status: 'stop'
+                        },
+                        {
+                            id: '2',
+                            name: 'plume',
+                            image: 'landers1037/plume',
+                            date: '2021-01-01 12:00',
+                            status: 'start'
+                        }
+                    ];
+                    this.images = [{id: '0', tags: ['plume:latest'], size: '103579269', date: '2021-01-01', contaniers: 10}]
+                    this.visible = true;
+                }, 1000)
+            }
         }
     }
 }
@@ -341,6 +403,7 @@ export default {
         cursor: pointer;
     }
     .docker-top {
+        cursor: pointer;
         padding: 10px;
         background-color: var(--light-bg-docker-color, #2a2b2b);
         border-radius: 4px;

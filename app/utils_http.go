@@ -31,7 +31,7 @@ func Get(url string) ([]byte, error) {
 }
 
 func Post(url string, body interface{}) ([]byte, error) {
-	client := &http.Client{Timeout: 5 * time.Second}
+	client := &http.Client{Timeout: 30 * time.Second}
 	jsonStr, e := json.Marshal(body)
 	if e != nil {
 		return nil, e

@@ -521,12 +521,16 @@ export default {
     },
     watch: {
         cpu_usage: function () {
-            if (this.cpu_usage && this.cpu_usage >= this.$store.state.limit) {
+            let cpu_usage = parseInt(this.cpu_usage, 10);
+            let limit = parseInt(this.$store.state.limit, 10);
+            if (this.cpu_usage && (cpu_usage >= limit)) {
                 this.notifyDanger("cpu使用量超出限制" + this.$store.state.limit + "%")
             }
         },
         mem_usage: function () {
-            if (this.mem && this.mem_usage >= this.$store.state.limit) {
+            let mem_usage = parseInt(this.mem_usage, 10);
+            let limit = parseInt(this.$store.state.limit, 10);
+            if (this.mem && (mem_usage >= limit)) {
                 this.notifyDanger("内存使用量超出限制" + this.$store.state.limit + "%")
             }
         }
