@@ -14,6 +14,7 @@ export default {
 <style scoped>
     .header {
         text-align: left;
+        padding: 4px 0;
     }
     .header .header-title {
         font-size: 1.8rem;

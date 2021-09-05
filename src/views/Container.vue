@@ -3,121 +3,121 @@
         <Header name="容器" v-if="!image_type"></Header>
         <Header name="镜像" v-if="image_type"></Header>
         <span id="create-btn"><font-awesome-icon icon="plus" @click="open_create"></font-awesome-icon></span>
-        <div class="docker-top" @click="show_images">
+        <div class="docker-top" @click="switch_images">
             <font-awesome-icon :icon="['fab', 'docker']" v-if="!image_type"></font-awesome-icon>
             <font-awesome-icon :icon="['fab', 'unsplash']" v-else></font-awesome-icon>
             <font-awesome-icon icon="angle-right" style="padding: 0 10px"></font-awesome-icon>
             <font-awesome-icon :icon="['fab', 'docker']" v-if="image_type"></font-awesome-icon>
             <font-awesome-icon :icon="['fab', 'unsplash']" v-else></font-awesome-icon>
         </div>
-        <van-notice-bar
-            left-icon="info-o"
-            mode="closeable"
-            text="Docker容器展示基于Docker API"
-        />
-        <div class="scroll">
-            <van-skeleton title :row="6" :loading="!visible" style="margin-top: 2rem"/>
-            <van-empty description="容器功能将在后台支持Docker API时自动开启" image="network" v-show="!containers&&!images" />
-            <transition name="van-slide-down" v-if="!image_type">
-                <div v-show="visible" class="container-list">
-                    <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
-                        <p class="container-title">{{c.name && c.name.length == 1 ? c.name[0] : c.name}}</p>
-                        <van-row justify="space-between" class="container-info">
-                            <van-col span="12"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
-                            <van-col span="9"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
-                            <van-col span="3" align="center"><span style="font-weight: bold">状态</span><br>
-                                <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'paused'"/>
-                                <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exited'"/>
-                                <font-awesome-icon icon="play" style="color: forestgreen" v-if="c.status !== 'paused' && c.status !== 'exited'"/>
-                            </van-col>
-                        </van-row>
+<!--        <van-notice-bar-->
+<!--            left-icon="info-o"-->
+<!--            mode="closeable"-->
+<!--            text="Docker容器展示基于Docker API"-->
+<!--        />-->
+            <div class="scroll">
+                <van-skeleton title :row="6" :loading="!visible" style="margin-top: 2rem"/>
+                <van-empty description="容器功能将在后台支持Docker API时自动开启" image="network" v-show="!containers&&!images" />
+                <transition name="van-slide-down" v-if="!image_type">
+                    <div v-show="visible" class="container-list">
+                        <div class="container-body" v-for="c in containers" :key="c.id" @click="showDetail(c.id)">
+                            <p class="container-title">{{c.name && c.name.length == 1 ? c.name[0] : c.name}}</p>
+                            <van-row justify="space-between" class="container-info">
+                                <van-col span="12"><span style="font-weight: bold">镜像</span><br><span class="container-info-data">{{c.image}}</span></van-col>
+                                <van-col span="9"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{c.date}}</span></van-col>
+                                <van-col span="3" align="center"><span style="font-weight: bold">状态</span><br>
+                                    <font-awesome-icon icon="stop" style="color: red" v-if="c.status === 'paused'"/>
+                                    <font-awesome-icon icon="skull" style="color: grey" v-if="c.status === 'exited'"/>
+                                    <font-awesome-icon icon="play" style="color: forestgreen" v-if="c.status !== 'paused' && c.status !== 'exited'"/>
+                                </van-col>
+                            </van-row>
+                        </div>
                     </div>
-                </div>
-            </transition>
-            <transition name="van-slide-down" v-else>
-                <div v-show="visible" class="container-list">
-                    <div class="container-body" v-for="i in images" :key="i.id">
-                        <p class="container-title">{{i.tags[0]}}</p>
-                        <van-row justify="space-between" class="container-info">
-                            <van-col span="10"><span style="font-weight: bold">大小</span><br><span class="container-info-data">{{i.size}}</span></van-col>
-                            <van-col span="10"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{i.date}}</span></van-col>
-                            <van-col span="4"><span style="font-weight: bold">容器</span><br><span class="container-info-data">{{i.containers}}</span></van-col>
-                        </van-row>
+                </transition>
+                <transition name="van-slide-down" v-else>
+                    <div v-show="visible" class="container-list">
+                        <div class="container-body" v-for="i in images" :key="i.id">
+                            <p class="container-title">{{i.tags[0]}}</p>
+                            <van-row justify="space-between" class="container-info">
+                                <van-col span="10"><span style="font-weight: bold">大小</span><br><span class="container-info-data">{{i.size}}</span></van-col>
+                                <van-col span="10"><span style="font-weight: bold">创建</span><br><span class="container-info-data">{{i.date}}</span></van-col>
+                                <van-col span="4"><span style="font-weight: bold">容器</span><br><span class="container-info-data">{{i.containers}}</span></van-col>
+                            </van-row>
+                        </div>
                     </div>
-                </div>
-            </transition>
-        </div>
-        <van-action-sheet v-model="show_create" title="创建容器" @close="clear">
-            <van-form @submit="create">
-                <van-field
-                    v-model="container_name"
-                    name="容器名"
-                    label="容器名"
-                    placeholder="容器名"
-                />
-                <van-field
-                    v-model="container_user"
-                    name="运行用户"
-                    label="运行用户"
-                    placeholder="运行用户"
-                />
-                <van-field
-                    v-model="container_image"
-                    name="镜像"
-                    label="镜像"
-                    placeholder="镜像"
-                    :rules="[{ required: true, message: '镜像必须指定' }]"
-                />
-                <van-field
-                    v-model="container_ports"
-                    name="暴露端口"
-                    label="暴露端口"
-                    placeholder="暴露端口(使用空格分隔80:80)"
-                />
-                <van-field
-                    v-model="container_volumes"
-                    name="挂载目录"
-                    label="挂载目录"
-                    placeholder="挂载目录(使用空格分隔/root:/home)"
-                />
-                <van-field
-                    v-model="container_cmds"
-                    name="命令"
-                    label="命令"
-                    placeholder="命令(使用逗号分隔)"
-                />
-                <van-field
-                    v-model="container_envs"
-                    name="环境变量"
-                    label="环境变量"
-                    placeholder="环境变量(使用空格分隔foo=foo)"
-                />
-                <van-field name="switch" label="使用tty">
-                    <template #input>
-                        <van-switch v-model="container_tty" size="20" />
-                    </template>
-                </van-field>
-                <van-field name="switch" label="后台运行">
-                    <template #input>
-                        <van-switch v-model="container_daemon" size="20" />
-                    </template>
-                </van-field>
-                <van-field name="switch" label="自动删除">
-                    <template #input>
-                        <van-switch v-model="container_rm" size="20" />
-                    </template>
-                </van-field>
-                <van-field
-                    v-model="final_cmd"
-                    name="预览"
-                    label="预览"
-                    placeholder="最终命令形式"
-                />
-                <div style="margin: 16px;">
-                    <van-button round block type="info" native-type="submit">创建</van-button>
-                </div>
-            </van-form>
-        </van-action-sheet>
+                </transition>
+            </div>
+            <van-action-sheet v-model="show_create" title="创建容器" @close="clear">
+                <van-form @submit="create">
+                    <van-field
+                            v-model="container_name"
+                            name="容器名"
+                            label="容器名"
+                            placeholder="容器名"
+                    />
+                    <van-field
+                            v-model="container_user"
+                            name="运行用户"
+                            label="运行用户"
+                            placeholder="运行用户"
+                    />
+                    <van-field
+                            v-model="container_image"
+                            name="镜像"
+                            label="镜像"
+                            placeholder="镜像"
+                            :rules="[{ required: true, message: '镜像必须指定' }]"
+                    />
+                    <van-field
+                            v-model="container_ports"
+                            name="暴露端口"
+                            label="暴露端口"
+                            placeholder="暴露端口(使用空格分隔80:80)"
+                    />
+                    <van-field
+                            v-model="container_volumes"
+                            name="挂载目录"
+                            label="挂载目录"
+                            placeholder="挂载目录(使用空格分隔/root:/home)"
+                    />
+                    <van-field
+                            v-model="container_cmds"
+                            name="命令"
+                            label="命令"
+                            placeholder="命令(使用空格分隔)"
+                    />
+                    <van-field
+                            v-model="container_envs"
+                            name="环境变量"
+                            label="环境变量"
+                            placeholder="环境变量(使用空格分隔foo=foo)"
+                    />
+                    <van-field name="switch" label="使用tty">
+                        <template #input>
+                            <van-switch v-model="container_tty" size="20" />
+                        </template>
+                    </van-field>
+                    <van-field name="switch" label="后台运行">
+                        <template #input>
+                            <van-switch v-model="container_daemon" size="20" />
+                        </template>
+                    </van-field>
+                    <van-field name="switch" label="自动删除">
+                        <template #input>
+                            <van-switch v-model="container_rm" size="20" />
+                        </template>
+                    </van-field>
+                    <van-field
+                            v-model="final_cmd"
+                            name="预览"
+                            label="预览"
+                            placeholder="最终命令形式"
+                    />
+                    <div style="margin: 16px;">
+                        <van-button round block type="info" native-type="submit">创建</van-button>
+                    </div>
+                </van-form>
+            </van-action-sheet>
     </div>
 </template>
 
@@ -200,6 +200,13 @@ export default {
         showDetail(id) {
             this.$store.commit('changeID', id);
             this.$store.commit('changeComps', 'Detail');
+        },
+        onRefresh() {
+            this.visible = false;
+            this.show_images();
+            setTimeout(()=>{
+                this.isLoading = false;
+            })
         },
         // 告警提示
         notifySuccess(message) {
@@ -341,11 +348,14 @@ export default {
             this.container_rm = true;
             this.final_cmd = '';
         },
+        switch_images() {
+            this.image_type = !this.image_type;
+            this.show_images();
+        },
         show_images() {
             this.visible = false;
             this.images = [];
             this.containers = [];
-            this.image_type = !this.image_type;
             if (this.image_type && (this.$store.state.watchdog === 'false' || this.$store.state.watchdog === false)) {
                 this.$axios.post(apis.api_images)
                     .then(res=>{
@@ -410,9 +420,12 @@ export default {
         margin: 10px 0;
         font-size: 1.2rem;
     }
+    .container /deep/ .van-pull-refresh {
+        height: 100%;
+    }
     .container .scroll {
         overflow-y: auto;
-        height: calc(100% - 180px);
+        height: calc(100% - 160px);
     }
     .container .scroll::-webkit-scrollbar {
         display: none;
@@ -420,7 +433,7 @@ export default {
         height: 0;
     }
     .container .container-list {
-        margin-top: 1rem;
+        margin-top: .8rem;
         text-align: left;
         overflow-y: auto;
     }
@@ -430,6 +443,9 @@ export default {
         padding: 10px;
         border-radius: 8px;
         margin-bottom: 10px;
+    }
+    .container .container-body:last-child {
+        margin-bottom: 2px;
     }
     .container .container-title {
         font-weight: bold;
@@ -447,5 +463,18 @@ export default {
     }
     .container /deep/ .van-skeleton__row, .container /deep/ .van-skeleton__title, .container /deep/ .van-skeleton__avatar{
         background-color: var(--light-loading-color, #252525);
+    }
+    .container /deep/ .van-popup {
+        background-color: var(--light-bg-container-color, #1a1a1a);
+    }
+    .container /deep/ .van-action-sheet {
+        color: var(--light-text-color, #a0a0a0);
+    }
+    .container /deep/ .van-cell {
+        background-color: var(--light-bg-color, #202020);
+        color: var(--light-text-color, #a0a0a0);
+    }
+    .container /deep/ .van-cell::after {
+        border-bottom-color: var(--light-line-border-color, #707070);
     }
 </style>

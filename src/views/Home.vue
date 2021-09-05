@@ -1,74 +1,74 @@
 <template>
-    <div class="scroll-body">
-        <div class="home">
-            <Header name="数据面板"></Header>
-            <!--  服务器uname信息    -->
-            <div id="data-server-title">
-                <p>{{server}}</p>
-            </div>
-            <div class="cell" @click="open_cpu_info">
-                <p class="cell-title">负载</p>
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="8" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
-                    <van-col span="5">
-                        <div>
-                            <span class="cell-head-cpu-pre cell-head-cpu-system"></span><span class="cell-head">系统</span><br>
-                            <span class="cell-data">{{cpu_usage_system}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
-                        </div>
-                    </van-col>
-                    <van-col span="5">
-                        <div>
-                            <span class="cell-head-cpu-pre cell-head-cpu-user"></span><span class="cell-head">用户</span><br>
-                            <span class="cell-data">{{cpu_usage_user}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head-cpu-pre cell-head-cpu-wait"></span><span class="cell-head">IO等待</span><br>
-                            <span class="cell-data">{{cpu_io_wait}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
-                        </div>
-                    </van-col>
-                </van-row>
-                <van-progress :percentage="cpu_usage" stroke-width="8" style="margin-top: .8rem;margin-bottom: .8rem" color="var(--light-text-active-color, #ff4a9e)"/>
-                <br/>
-                <van-row gutter="20" justify="center" style="margin-top: .2rem">
-                    <van-col span="6" class="cell-head">
-                        <div>
-                            <span class="cell-head">核心数</span><br>
-                            <span class="cell-data">{{cpu_count}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">空闲</span><br>
-                            <span class="cell-data">{{cpu_free}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">运行时间</span><br>
-                            <span class="cell-data">{{cpu_run}}</span><span style="margin-left: 2px;font-size: .9rem">Day</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <div class="load-bar"><span id="m1"></span></div>
-                            <div class="load-bar"><span id="m5"></span></div>
-                            <div class="load-bar"><span id="m15"></span></div>
-                        </div>
-                    </van-col>
-                </van-row>
-                <van-divider />
-                <van-row>
-                    <van-col span="24">
-                        <font-awesome-icon icon="network-wired" style="font-size: .9rem;margin-right: 4px"/>
+    <div class="home">
+        <Header name="数据面板"></Header>
+        <!--  服务器uname信息    -->
+        <div id="data-server-title">
+            <p>{{server}}</p>
+        </div>
+        <div class="scroll-body">
+                <div class="cell" @click="open_cpu_info">
+                    <p class="cell-title">负载</p>
+                    <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                        <van-col span="8" class="cell-head cell-head-cpu">{{ cpu_usage }} %</van-col>
+                        <van-col span="5">
+                            <div>
+                                <span class="cell-head-cpu-pre cell-head-cpu-system"></span><span class="cell-head">系统</span><br>
+                                <span class="cell-data">{{cpu_usage_system}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            </div>
+                        </van-col>
+                        <van-col span="5">
+                            <div>
+                                <span class="cell-head-cpu-pre cell-head-cpu-user"></span><span class="cell-head">用户</span><br>
+                                <span class="cell-data">{{cpu_usage_user}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head-cpu-pre cell-head-cpu-wait"></span><span class="cell-head">IO等待</span><br>
+                                <span class="cell-data">{{cpu_io_wait}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            </div>
+                        </van-col>
+                    </van-row>
+                    <van-progress :percentage="cpu_usage" stroke-width="8" style="margin-top: .8rem;margin-bottom: .8rem" color="var(--light-text-active-color, #ff4a9e)"/>
+                    <br/>
+                    <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                        <van-col span="6" class="cell-head">
+                            <div>
+                                <span class="cell-head">核心数</span><br>
+                                <span class="cell-data">{{cpu_count}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">空闲</span><br>
+                                <span class="cell-data">{{cpu_free}}</span><span style="margin-left: 2px;font-size: .9rem">%</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">运行时间</span><br>
+                                <span class="cell-data">{{cpu_run}}</span><span style="margin-left: 2px;font-size: .9rem">Day</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <div class="load-bar"><span id="m1"></span></div>
+                                <div class="load-bar"><span id="m5"></span></div>
+                                <div class="load-bar"><span id="m15"></span></div>
+                            </div>
+                        </van-col>
+                    </van-row>
+                    <van-divider />
+                    <van-row>
+                        <van-col span="24">
+                            <font-awesome-icon icon="network-wired" style="font-size: .9rem;margin-right: 4px"/>
                             <span class="cell-head" style="margin-right: 16px">平均负载</span>
                             <span class="cell-data">{{cpu_load}}</span>
-                    </van-col>
-                </van-row>
-            </div>
-            <!--     配套的cpu详情      -->
-            <van-action-sheet v-model:show="show_cpu" title="CPU详情" style="padding: 10px 0" @closed="closeLoading">
+                        </van-col>
+                    </van-row>
+                </div>
+                <!--     配套的cpu详情      -->
+                <van-action-sheet v-model:show="show_cpu" title="CPU详情" style="padding: 10px 0" @closed="closeLoading">
                     <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
                         <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
                         <van-cell-group inset v-show="!sheet_loading">
@@ -81,116 +81,116 @@
                     </div>
                 </van-action-sheet>
 
-            <div class="cell" @click="open_mem_info">
-                <p class="cell-title">内存</p>
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="8" class="cell-head cell-head-mem">{{ mem_usage }} %</van-col>
-                    <van-col span="5">
-                        <div>
-                            <span class="cell-head">可用</span><br>
-                            <span class="cell-data">{{mem_free}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="5">
-                        <div>
-                            <span class="cell-head">已用</span><br>
-                            <span class="cell-data">{{mem_used}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">页面缓存</span><br>
-                            <span class="cell-data">{{mem_cache}}</span>
-                        </div>
-                    </van-col>
-                </van-row>
-            </div>
-            <!--     配套的mem详情      -->
-            <van-action-sheet v-model:show="show_mem" title="内存详情" style="padding: 10px 0" @closed="closeLoading">
-                <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
-                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                    <van-cell-group inset v-show="!sheet_loading">
-                        <van-cell title="厂商" :value="mem_info.manufacturer"/>
-                        <van-cell title="型号" :value="mem_info.product"/>
-                        <van-cell title="容量" :value="mem_info.size"/>
-                        <van-cell title="频率" :value="mem_info.speed"/>
-                        <van-cell title="带宽" :value="mem_info.width"/>
-                    </van-cell-group>
-                </div>
-            </van-action-sheet>
-
-            <div class="cell"  @click="show_progress = true">
-                <p class="cell-title">进程</p>
-                <van-row style="margin-top: .5rem">
-                    <van-col span="24">
-                        <font-awesome-icon :icon="['fab', 'ubuntu']" v-if="kernel_os === 'ubuntu'" style="font-size: .9rem;margin-right: 4px"/>
-                        <font-awesome-icon :icon="['fab', 'centos']" v-else-if="kernel_os === 'centos'" style="font-size: .9rem;margin-right: 4px"/>
-                        <font-awesome-icon :icon="['fab', 'suse']" v-else-if="kernel_os === 'suse'" style="font-size: .9rem;margin-right: 4px"/>
-                        <font-awesome-icon :icon="['fab', 'redhat']" v-else-if="kernel_os === 'redhat'" style="font-size: .9rem;margin-right: 4px"/>
-                        <font-awesome-icon :icon="['fab', 'fedora']" v-else-if="kernel_os === 'fedora'" style="font-size: .9rem;margin-right: 4px"/>
-                        <font-awesome-icon :icon="['fab', 'linux']" v-else style="font-size: .9rem;margin-right: 4px"/>
-                        <span class="cell-data" style="margin-right: 8px">{{ kernel_type }}</span>
-                        <span class="cell-data">{{kernel_version}}</span>
-                    </van-col>
-                </van-row>
-                <van-divider />
-                <van-row gutter="20" justify="center">
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">总进程</span><br>
-                            <span class="cell-data">{{progress_all}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">运行进程</span><br>
-                            <span class="cell-data">{{progress_run}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">僵尸进程</span><br>
-                            <span class="cell-data">{{progress_dead}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">休眠进程</span><br>
-                            <span class="cell-data">{{progress_sleep}}</span>
-                        </div>
-                    </van-col>
-                </van-row>
-            </div>
-            <!--配套的进程详情-->
-            <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0" @closed="closeLoading">
-                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
-                    <van-row gutter="20" justify="center" style="margin-top: .2rem">
-                        <van-col span="4">
-                            <span class="bold" style="margin-right: 16px;font-weight: bold">PID</span>
+                <div class="cell" @click="open_mem_info">
+                    <p class="cell-title">内存</p>
+                    <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                        <van-col span="8" class="cell-head cell-head-mem">{{ mem_usage }} %</van-col>
+                        <van-col span="5">
+                            <div>
+                                <span class="cell-head">可用</span><br>
+                                <span class="cell-data">{{mem_free}}</span>
+                            </div>
                         </van-col>
-                        <van-col span="4">
-                            <span style="margin-right: 16px;font-weight: bold">cpu(%)</span>
+                        <van-col span="5">
+                            <div>
+                                <span class="cell-head">已用</span><br>
+                                <span class="cell-data">{{mem_used}}</span>
+                            </div>
                         </van-col>
-                        <van-col span="4">
-                            <span class="cell-head" style="margin-right: 16px;font-weight: bold">mem(%)</span>
-                        </van-col>
-                        <van-col span="12" align="center">
-                            <span class="cell-head" style="margin-right: 16px;font-weight: bold">命令</span>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">页面缓存</span><br>
+                                <span class="cell-data">{{mem_cache}}</span>
+                            </div>
                         </van-col>
                     </van-row>
-                    <div v-for="p in progress_list">
+                </div>
+                <!--     配套的mem详情      -->
+                <van-action-sheet v-model:show="show_mem" title="内存详情" style="padding: 10px 0" @closed="closeLoading">
+                    <div class="content" style="padding: 0 10px 10px 10px;text-align: left">
+                        <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                        <van-cell-group inset v-show="!sheet_loading">
+                            <van-cell title="厂商" :value="mem_info.manufacturer"/>
+                            <van-cell title="型号" :value="mem_info.product"/>
+                            <van-cell title="容量" :value="mem_info.size"/>
+                            <van-cell title="频率" :value="mem_info.speed"/>
+                            <van-cell title="带宽" :value="mem_info.width"/>
+                        </van-cell-group>
+                    </div>
+                </van-action-sheet>
+
+                <div class="cell"  @click="show_progress = true">
+                    <p class="cell-title">进程</p>
+                    <van-row style="margin-top: .5rem">
+                        <van-col span="24">
+                            <font-awesome-icon :icon="['fab', 'ubuntu']" v-if="kernel_os === 'ubuntu'" style="font-size: .9rem;margin-right: 4px"/>
+                            <font-awesome-icon :icon="['fab', 'centos']" v-else-if="kernel_os === 'centos'" style="font-size: .9rem;margin-right: 4px"/>
+                            <font-awesome-icon :icon="['fab', 'suse']" v-else-if="kernel_os === 'suse'" style="font-size: .9rem;margin-right: 4px"/>
+                            <font-awesome-icon :icon="['fab', 'redhat']" v-else-if="kernel_os === 'redhat'" style="font-size: .9rem;margin-right: 4px"/>
+                            <font-awesome-icon :icon="['fab', 'fedora']" v-else-if="kernel_os === 'fedora'" style="font-size: .9rem;margin-right: 4px"/>
+                            <font-awesome-icon :icon="['fab', 'linux']" v-else style="font-size: .9rem;margin-right: 4px"/>
+                            <span class="cell-data" style="margin-right: 8px">{{ kernel_type }}</span>
+                            <span class="cell-data">{{kernel_version}}</span>
+                        </van-col>
+                    </van-row>
+                    <van-divider />
+                    <van-row gutter="20" justify="center">
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">总进程</span><br>
+                                <span class="cell-data">{{progress_all}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">运行进程</span><br>
+                                <span class="cell-data">{{progress_run}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">僵尸进程</span><br>
+                                <span class="cell-data">{{progress_dead}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">休眠进程</span><br>
+                                <span class="cell-data">{{progress_sleep}}</span>
+                            </div>
+                        </van-col>
+                    </van-row>
+                </div>
+                <!--配套的进程详情-->
+                <van-action-sheet v-model:show="show_progress" title="进程详情" style="padding: 10px 0" @closed="closeLoading">
+                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                    <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
                         <van-row gutter="20" justify="center" style="margin-top: .2rem">
                             <van-col span="4">
-                                <span class="bold" style="font-size: .9rem">{{ p.pid }}</span>
+                                <span class="bold" style="margin-right: 16px;font-weight: bold">PID</span>
                             </van-col>
                             <van-col span="4">
-                                <span style="font-size: .9rem">{{ p.cpu }}</span>
+                                <span style="margin-right: 16px;font-weight: bold">cpu(%)</span>
                             </van-col>
                             <van-col span="4">
-                                <span class="cell-head" style="font-size: .9rem">{{ p.mem }}</span>
+                                <span class="cell-head" style="margin-right: 16px;font-weight: bold">mem(%)</span>
                             </van-col>
-                            <van-col span="12">
+                            <van-col span="12" align="center">
+                                <span class="cell-head" style="margin-right: 16px;font-weight: bold">命令</span>
+                            </van-col>
+                        </van-row>
+                        <div v-for="p in progress_list">
+                            <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                                <van-col span="4">
+                                    <span class="bold" style="font-size: .9rem">{{ p.pid }}</span>
+                                </van-col>
+                                <van-col span="4">
+                                    <span style="font-size: .9rem">{{ p.cpu }}</span>
+                                </van-col>
+                                <van-col span="4">
+                                    <span class="cell-head" style="font-size: .9rem">{{ p.mem }}</span>
+                                </van-col>
+                                <van-col span="12">
                                 <span class="cell-head"
                                       style="
                                       width: 96%;
@@ -201,34 +201,34 @@
                                       white-space: nowrap"
                                       :title="p.cmd"
                                 >{{ p.cmd }}</span>
-                            </van-col>
-                        </van-row>
+                                </van-col>
+                            </van-row>
+                        </div>
                     </div>
-                </div>
-            </van-action-sheet>
+                </van-action-sheet>
 
-            <div class="cell" @click="open_net_info">
-                <p class="cell-title">网络IO</p>
-                <van-row gutter="10" justify="center" style="margin-top: .5rem">
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">上传</span><br>
-                            <span class="cell-data">{{net_upload}} /s</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">下载</span><br>
-                            <span class="cell-data">{{net_download}} /s</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div class="cell-data">
-                            <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
-                            <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
-                        </div>
-                    </van-col>
-                    <van-col span="6" align="center">
+                <div class="cell" @click="open_net_info">
+                    <p class="cell-title">网络IO</p>
+                    <van-row gutter="10" justify="center" style="margin-top: .5rem">
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">上传</span><br>
+                                <span class="cell-data">{{net_upload}} /s</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">下载</span><br>
+                                <span class="cell-data">{{net_download}} /s</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div class="cell-data">
+                                <font-awesome-icon icon="arrow-up" style="color: #a0a0a0" />&nbsp;<span>{{network_upload}}</span><span style="background-color: #ff7f50;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span><br>
+                                <font-awesome-icon icon="arrow-down" style="color: #a0a0a0" />&nbsp;<span>{{network_download}}</span><span style="background-color: #7fff00;height: 12px;width: 6px;display: inline-block;margin-left: 4px;border-radius: 4px"></span>
+                            </div>
+                        </van-col>
+                        <van-col span="6" align="center">
                             <van-circle
                                     v-model:current-rate="network_init"
                                     :rate="network_percent" :speed="100"
@@ -236,75 +236,75 @@
                                     size="42px"
                                     color="var(--light-circle-color, #7fff00)"
                                     layer-color="var(--light-circle-bg-color, #ff7f50)"/>
-                    </van-col>
-                </van-row>
-                <van-divider />
-                <van-row gutter="20" justify="center" style="margin-top: .5rem">
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">重传连接</span><br>
-                            <span class="cell-data">{{net_retry}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">主动建连</span><br>
-                            <span class="cell-data">{{net_active}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">被动建连</span><br>
-                            <span class="cell-data">{{net_passive}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">建连失败</span><br>
-                            <span class="cell-data">{{net_fail}}</span>
-                        </div>
-                    </van-col>
-                </van-row>
-                <van-divider />
-                <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv4</span> ⇌ {{ipv4}}</div>
-                <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv6</span> ⇌ {{ipv6}}</div>
-            </div>
-            <!--     配套的net详情      -->
-            <van-action-sheet v-model:show="show_net" title="网络详情" style="padding: 10px 0" @closed="closeLoading">
-                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
-                    <van-row gutter="20" justify="center" style="margin-top: .2rem">
-                        <van-col span="4">
-                            <span class="bold" style="font-weight: bold">ID</span>
-                        </van-col>
-                        <van-col span="4">
-                            <span style="font-weight: bold">状态</span>
-                        </van-col>
-                        <van-col span="4">
-                            <span class="cell-head" style="font-weight: bold">接收</span>
-                        </van-col>
-                        <van-col span="4">
-                            <span class="cell-head" style="font-weight: bold">发送</span>
-                        </van-col>
-                        <van-col span="8" align="center">
-                            <span class="cell-head" style="font-weight: bold">监听地址</span>
                         </van-col>
                     </van-row>
-                    <div v-for="n in net_info">
+                    <van-divider />
+                    <van-row gutter="20" justify="center" style="margin-top: .5rem">
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">重传连接</span><br>
+                                <span class="cell-data">{{net_retry}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">主动建连</span><br>
+                                <span class="cell-data">{{net_active}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">被动建连</span><br>
+                                <span class="cell-data">{{net_passive}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">建连失败</span><br>
+                                <span class="cell-data">{{net_fail}}</span>
+                            </div>
+                        </van-col>
+                    </van-row>
+                    <van-divider />
+                    <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv4</span> ⇌ {{ipv4}}</div>
+                    <div style="font-size: .85rem"><font-awesome-icon icon="wifi" style="color: #23fb1a" />&emsp;<span class="cell-data">ipv6</span> ⇌ {{ipv6}}</div>
+                </div>
+                <!--     配套的net详情      -->
+                <van-action-sheet v-model:show="show_net" title="网络详情" style="padding: 10px 0" @closed="closeLoading">
+                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                    <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
                         <van-row gutter="20" justify="center" style="margin-top: .2rem">
                             <van-col span="4">
-                                <span class="bold" style="font-size: .9rem">{{ n.id }}</span>
+                                <span class="bold" style="font-weight: bold">ID</span>
                             </van-col>
                             <van-col span="4">
-                                <span style="font-size: .9rem">{{ n.state }}</span>
+                                <span style="font-weight: bold">状态</span>
                             </van-col>
-                            <van-col span="3">
-                                <span class="cell-head" style="font-size: .9rem">{{ n.r }}</span>
+                            <van-col span="4">
+                                <span class="cell-head" style="font-weight: bold">接收</span>
                             </van-col>
-                            <van-col span="3">
-                                <span class="cell-head" style="font-size: .9rem">{{ n.s }}</span>
+                            <van-col span="4">
+                                <span class="cell-head" style="font-weight: bold">发送</span>
                             </van-col>
-                            <van-col span="10">
+                            <van-col span="8" align="center">
+                                <span class="cell-head" style="font-weight: bold">监听地址</span>
+                            </van-col>
+                        </van-row>
+                        <div v-for="n in net_info">
+                            <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                                <van-col span="4">
+                                    <span class="bold" style="font-size: .9rem">{{ n.id }}</span>
+                                </van-col>
+                                <van-col span="4">
+                                    <span style="font-size: .9rem">{{ n.state }}</span>
+                                </van-col>
+                                <van-col span="3">
+                                    <span class="cell-head" style="font-size: .9rem">{{ n.r }}</span>
+                                </van-col>
+                                <van-col span="3">
+                                    <span class="cell-head" style="font-size: .9rem">{{ n.s }}</span>
+                                </van-col>
+                                <van-col span="10">
                                 <span class="cell-head"
                                       style="
                                       width: 96%;
@@ -315,92 +315,92 @@
                                       white-space: nowrap"
                                       :title="n.address"
                                 >{{ n.address }}</span>
-                            </van-col>
-                        </van-row>
+                                </van-col>
+                            </van-row>
+                        </div>
                     </div>
-                </div>
-            </van-action-sheet>
+                </van-action-sheet>
 
-            <div class="cell" @click="open_disk_info">
-                <p class="cell-title">磁盘IO</p>
-                <van-row gutter="10" justify="center" style="margin-top: .5rem">
-                    <van-col span="14">
-                        <div>
-                            <span class="cell-head" style="font-weight: bold">/</span><br>
-                            <span class="cell-data">{{ disk_mount }}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="10" align="center">
-                        <div>
-                            <span class="cell-head">{{disk_used}}</span>
-                            <span class="cell-head">/{{disk_all}}</span>
-                            <div class="data-bar" id="data-bar"><span id="data-bar-inner"></span></div>
-                        </div>
-                    </van-col>
-                </van-row>
-                <van-divider />
-                <van-row gutter="20" justify="end" style="margin-top: .5rem">
-                    <van-col span="4">
-                        <div>
-                            <span class="cell-head cell-io"></span><br>
-                            <span class="cell-data">读</span><br>
-                            <span class="cell-data">写</span>
-                        </div>
-                    </van-col>
-                    <van-col span="8">
-                        <div>
-                            <span class="cell-head">速率</span><br>
-                            <span class="cell-data">{{disk_read_rate}}</span><br>
-                            <span class="cell-data">{{disk_write_rate}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">字节</span><br>
-                            <span class="cell-data">{{disk_read_byte}}</span><br>
-                            <span class="cell-data">{{disk_write_byte}}</span>
-                        </div>
-                    </van-col>
-                    <van-col span="6">
-                        <div>
-                            <span class="cell-head">延迟</span><br>
-                            <span class="cell-data">{{disk_read_delay}}ms</span><br>
-                            <span class="cell-data">{{disk_write_delay}}ms</span>
-                        </div>
-                    </van-col>
-                </van-row>
-            </div>
-            <!--     配套的disk详情      -->
-            <van-action-sheet v-model:show="show_disk" title="磁盘详情" style="padding: 10px 0" @closed="closeLoading">
-                <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
-                <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
-                    <van-cell-group inset>
-                        <van-cell title="分区表" :value="disk_info.label"/>
-                        <van-cell title="模型" :value="disk_info.model"/>
-                    </van-cell-group>
-                    <van-row gutter="20" justify="center" style="margin-top: .8rem">
-                        <van-col span="6">
-                            <span class="bold" style="font-weight: bold;font-size: .8rem">文件系统</span>
+                <div class="cell" @click="open_disk_info">
+                    <p class="cell-title">磁盘IO</p>
+                    <van-row gutter="10" justify="center" style="margin-top: .5rem">
+                        <van-col span="14">
+                            <div>
+                                <span class="cell-head" style="font-weight: bold">/</span><br>
+                                <span class="cell-data">{{ disk_mount }}</span>
+                            </div>
                         </van-col>
-                        <van-col span="3">
-                            <span style="font-weight: bold;font-size: .8rem">大小</span>
-                        </van-col>
-                        <van-col span="3">
-                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">已用</span>
-                        </van-col>
-                        <van-col span="3">
-                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">可用</span>
-                        </van-col>
-                        <van-col span="3" align="center">
-                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">占比</span>
-                        </van-col>
-                        <van-col span="6" align="center">
-                            <span class="cell-head" style="font-weight: bold;font-size: .8rem">挂载</span>
+                        <van-col span="10" align="center">
+                            <div>
+                                <span class="cell-head">{{disk_used}}</span>
+                                <span class="cell-head">/{{disk_all}}</span>
+                                <div class="data-bar" id="data-bar"><span id="data-bar-inner"></span></div>
+                            </div>
                         </van-col>
                     </van-row>
-                    <div v-for="d in disk_info.list">
-                        <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                    <van-divider />
+                    <van-row gutter="20" justify="end" style="margin-top: .5rem">
+                        <van-col span="4">
+                            <div>
+                                <span class="cell-head cell-io"></span><br>
+                                <span class="cell-data">读</span><br>
+                                <span class="cell-data">写</span>
+                            </div>
+                        </van-col>
+                        <van-col span="8">
+                            <div>
+                                <span class="cell-head">速率</span><br>
+                                <span class="cell-data">{{disk_read_rate}}</span><br>
+                                <span class="cell-data">{{disk_write_rate}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">字节</span><br>
+                                <span class="cell-data">{{disk_read_byte}}</span><br>
+                                <span class="cell-data">{{disk_write_byte}}</span>
+                            </div>
+                        </van-col>
+                        <van-col span="6">
+                            <div>
+                                <span class="cell-head">延迟</span><br>
+                                <span class="cell-data">{{disk_read_delay}}ms</span><br>
+                                <span class="cell-data">{{disk_write_delay}}ms</span>
+                            </div>
+                        </van-col>
+                    </van-row>
+                </div>
+                <!--     配套的disk详情      -->
+                <van-action-sheet v-model:show="show_disk" title="磁盘详情" style="padding: 10px 0" @closed="closeLoading">
+                    <van-skeleton title :row="6" :loading="sheet_loading" style="margin-top: 10px"/>
+                    <div class="content" style="padding: 0 10px 10px 10px;text-align: left" v-show="!sheet_loading">
+                        <van-cell-group inset>
+                            <van-cell title="分区表" :value="disk_info.label"/>
+                            <van-cell title="模型" :value="disk_info.model"/>
+                        </van-cell-group>
+                        <van-row gutter="20" justify="center" style="margin-top: .8rem">
                             <van-col span="6">
+                                <span class="bold" style="font-weight: bold;font-size: .8rem">文件系统</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span style="font-weight: bold;font-size: .8rem">大小</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-weight: bold;font-size: .8rem">已用</span>
+                            </van-col>
+                            <van-col span="3">
+                                <span class="cell-head" style="font-weight: bold;font-size: .8rem">可用</span>
+                            </van-col>
+                            <van-col span="3" align="center">
+                                <span class="cell-head" style="font-weight: bold;font-size: .8rem">占比</span>
+                            </van-col>
+                            <van-col span="6" align="center">
+                                <span class="cell-head" style="font-weight: bold;font-size: .8rem">挂载</span>
+                            </van-col>
+                        </van-row>
+                        <div v-for="d in disk_info.list">
+                            <van-row gutter="20" justify="center" style="margin-top: .2rem">
+                                <van-col span="6">
                                 <span class="bold"
                                       style="font-size: .9rem;
                                       width: 96%;
@@ -409,20 +409,20 @@
                                       display: inline-block;
                                       white-space: nowrap"
                                 >{{ d.system }}</span>
-                            </van-col>
-                            <van-col span="3">
-                                <span style="font-size: .9rem">{{ d.size }}</span>
-                            </van-col>
-                            <van-col span="3">
-                                <span class="cell-head" style="font-size: .9rem">{{ d.used }}</span>
-                            </van-col>
-                            <van-col span="3">
-                                <span class="cell-head" style="font-size: .9rem">{{ d.avail }}</span>
-                            </van-col>
-                            <van-col span="3">
-                                <span class="cell-head" style="font-size: .9rem">{{ d.use }}</span>
-                            </van-col>
-                            <van-col span="6">
+                                </van-col>
+                                <van-col span="3">
+                                    <span style="font-size: .9rem">{{ d.size }}</span>
+                                </van-col>
+                                <van-col span="3">
+                                    <span class="cell-head" style="font-size: .9rem">{{ d.used }}</span>
+                                </van-col>
+                                <van-col span="3">
+                                    <span class="cell-head" style="font-size: .9rem">{{ d.avail }}</span>
+                                </van-col>
+                                <van-col span="3">
+                                    <span class="cell-head" style="font-size: .9rem">{{ d.use }}</span>
+                                </van-col>
+                                <van-col span="6">
                                 <span class="cell-head"
                                       style="
                                       width: 96%;
@@ -433,12 +433,12 @@
                                       white-space: nowrap"
                                       :title="d.mount"
                                 >{{ d.mount }}</span>
-                            </van-col>
-                        </van-row>
+                                </van-col>
+                            </van-row>
+                        </div>
                     </div>
-                </div>
-            </van-action-sheet>
-        </div>
+                </van-action-sheet>
+            </div>
     </div>
 </template>
 
@@ -900,13 +900,14 @@ export default {
 
 <style scoped>
     .home {
-        overflow-y: auto;
         padding-bottom: 40px;
         padding-top: 8px;
+        height: 100%;
     }
     .scroll-body {
         overflow: auto;
-        height: 100%
+        height: calc(100% - 120px);
+        border-radius: 10px;
     }
     .scroll-body::-webkit-scrollbar {
         display: none;
@@ -921,7 +922,7 @@ export default {
     #data-server-title {
         text-align: left;
         margin-top: 4px;
-        margin-bottom: 16px;
+        margin-bottom: 10px;
     }
     #data-server-title p {
         font-size: .85rem;
@@ -932,7 +933,7 @@ export default {
         background-color: var(--light-bg-color, #202020);
         padding: 10px 20px;
         border-radius: 10px;
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
     .cell .cell-title {
         font-size: 1.1rem;

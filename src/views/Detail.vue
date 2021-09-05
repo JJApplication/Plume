@@ -329,7 +329,7 @@ export default {
     }
     .detail .scroll {
         overflow-y: auto;
-        height: calc(100% - 140px);
+        height: calc(100% - 150px);
         border-radius: 10px;
         margin-top: 10px;
     }
@@ -372,13 +372,13 @@ export default {
     .detail .info-group {
         text-align: left;
         margin-top: 10px;
-        padding: 0 20px;
+        padding: 0 20px 4px 20px;
         background-color: var(--light-bg-color, #202020);
         border-radius: 10px;
     }
     @media (max-width: 520px) {
         .detail .info-group {
-            padding: 0 10px;
+            padding: 0 10px 4px 10px;
         }
     }
     .info-group .info {

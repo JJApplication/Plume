@@ -281,8 +281,9 @@ export default {
     .setting .scroll {
         margin-top: 20px;
         overflow-y: auto;
-        height: calc(100% - 110px);
+        height: calc(100% - 120px);
         border-radius: 10px;
+        background-color: var(--light-bg-color, #202020);
     }
     .setting .scroll::-webkit-scrollbar {
         display: none;
