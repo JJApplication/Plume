@@ -1,5 +1,9 @@
 # plume-app
 
+<a href="https://goreportcard.com/report/github.com/landers1037/dirichlet"><img src="./copyright/goreport.svg" /></a>
+<a href="http://service.renj.io"><img src="./copyright/renj.io.svg"/></a>
+<a href="https://github.com/JJApplication"><img src="./copyright/copyright-JJService.svg"/></a>
+
 一个服务器可视化webapp
 
 模仿ios应用 [serverCat](https://servercat.app/)编写
