@@ -18,13 +18,13 @@ func getCombinationData(eth, disk string, debug bool) Combination {
 	chNet := make(chan NetInfo)
 	chDisk := make(chan DiskInfo)
 
-	go func() { chServer<-getServerInfo(debug) }()
-	go func() { chCPU<-getCPUInfo(debug) }()
-	go func() { chMem<-getMemInfo(debug) }()
-	go func() { chKernel<-getKernelData(debug) }()
-	go func() { chNet<-getNetInfo(eth, debug) }()
-	go func() { chPro<-getProgressData(debug) }()
-	go func() { chDisk<-getDiskInfo(disk, debug) }()
+	go func() { chServer <- getServerInfo(debug) }()
+	go func() { chCPU <- getCPUInfo(debug) }()
+	go func() { chMem <- getMemInfo(debug) }()
+	go func() { chKernel <- getKernelData(debug) }()
+	go func() { chNet <- getNetInfo(eth, debug) }()
+	go func() { chPro <- getProgressData(debug) }()
+	go func() { chDisk <- getDiskInfo(disk, debug) }()
 
 	comb.ServerInfo = <-chServer
 	comb.CPUInfo = <-chCPU

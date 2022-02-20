@@ -35,8 +35,8 @@ func getImages(api string) []Images {
 }
 
 func calcSize(s int) string {
-	gb := s / (1024*1024*1024)
-	mb := s / (1024*1024)
+	gb := s / (1024 * 1024 * 1024)
+	mb := s / (1024 * 1024)
 	kb := s / 1024
 
 	if gb >= 1 {

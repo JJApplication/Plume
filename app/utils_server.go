@@ -18,7 +18,7 @@ func getServerInfo(debug bool) string {
 	res, e := cmdRun(sh, debug)
 	if e != nil {
 		return ""
-	}else {
+	} else {
 		return strings.Trim(string(res), "\n\\n\\l\t\\t")
 	}
 }

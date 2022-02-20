@@ -41,7 +41,7 @@ func getDiskInfo(d string, debug bool) DiskInfo {
 	}
 
 	type Disk struct {
-		Read string `json:"kB_read"`
+		Read  string `json:"kB_read"`
 		Write string `json:"kB_wrtn"`
 	}
 	type Statistics struct {
@@ -71,7 +71,7 @@ func getDiskInfo(d string, debug bool) DiskInfo {
 	if e != nil {
 		disk.DiskReadRate = "0 KB/s"
 		disk.DiskWriteRate = "0 KB/s"
-	}else {
+	} else {
 		disk.DiskReadRate = calcRate(readRate)
 		disk.DiskReadDelay = fmt.Sprintf("%.2f", readDelay.(float64))
 		disk.DiskWriteRate = calcRate(writeRate)
@@ -81,7 +81,7 @@ func getDiskInfo(d string, debug bool) DiskInfo {
 	// 读写量kb 因为版本问题不一致 不能使用列判断
 	if d != "" {
 		sh = fmt.Sprintf("iostat -d %s -o JSON", d)
-	}else {
+	} else {
 		sh = "iostat -d -o JSON"
 	}
 
@@ -96,7 +96,7 @@ func getDiskInfo(d string, debug bool) DiskInfo {
 	if e != nil {
 		disk.DiskReadByte = "0"
 		disk.DiskWriteByte = "0"
-	}else {
+	} else {
 		disk.DiskReadByte = calcByte(readByte)
 		disk.DiskWriteByte = calcByte(writeByte)
 	}
@@ -135,11 +135,11 @@ func getDiskInfoDetail(debug bool) DiskInfoDetail {
 			if len(dis) >= 6 {
 				d = append(d, map[string]string{
 					"system": dis[0],
-					"size": dis[1],
-					"used": dis[2],
-					"avail": dis[3],
-					"use": dis[4],
-					"mount": dis[5],
+					"size":   dis[1],
+					"used":   dis[2],
+					"avail":  dis[3],
+					"use":    dis[4],
+					"mount":  dis[5],
 				})
 			}
 		}

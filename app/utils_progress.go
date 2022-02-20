@@ -78,4 +78,3 @@ func getProgressListData(num string, debug bool) []ProgressListInfo {
 
 	return pro
 }
-

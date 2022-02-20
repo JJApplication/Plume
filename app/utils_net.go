@@ -36,9 +36,9 @@ func calcByte(s interface{}) string {
 	mb := data / 1024
 	if gb >= 1 {
 		return fmt.Sprintf("%d GB", gb)
-	}else if mb >= 1 {
+	} else if mb >= 1 {
 		return fmt.Sprintf("%d MB", mb)
-	}else {
+	} else {
 		return fmt.Sprintf("%s KB", s)
 	}
 }
@@ -50,8 +50,8 @@ func calcNet(s string) string {
 	if e != nil {
 		return "0B"
 	}
-	gb := data / (1024*1024*1024)
-	mb := data / (1024*1024)
+	gb := data / (1024 * 1024 * 1024)
+	mb := data / (1024 * 1024)
 	kb := data / 1024
 
 	if gb >= 1 {
@@ -72,17 +72,17 @@ func calcNetRate(old, new string, offset int) string {
 	oldData, e := strconv.Atoi(old)
 
 	if e != nil {
-		return  "0b"
+		return "0b"
 	}
 
 	newData, e := strconv.Atoi(new)
 	if e != nil {
-		return  "0b"
+		return "0b"
 	}
 
 	data := (newData - oldData) * 1000 / offset
-	gb := data / (1024*1024*1024)
-	mb := data / (1024*1024)
+	gb := data / (1024 * 1024 * 1024)
+	mb := data / (1024 * 1024)
 	kb := data / 1024
 
 	if gb >= 1 {
@@ -109,7 +109,7 @@ func calcRetrans(send1, send2 string, r1, r2 string, offset int) string {
 	if send == 0 || r == 0 {
 		return "0"
 	}
-	return fmt.Sprintf("%d", r / send * 1000 / offset)
+	return fmt.Sprintf("%d", r/send*1000/offset)
 }
 
 // 获取网络信息
@@ -188,7 +188,7 @@ func calcNetworkRateByLoop(eth string, debug bool) (string, string) {
 
 	go func() {
 		var total int
-		for i:=0; i<10; i++ {
+		for i := 0; i < 10; i++ {
 			res, _ := cmdRun(shDown, debug)
 			byte1, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
 			time.Sleep(time.Millisecond * 20)
@@ -199,12 +199,12 @@ func calcNetworkRateByLoop(eth string, debug bool) (string, string) {
 			total += byteDownLoad
 		}
 
-		chD<-total
+		chD <- total
 	}()
 
 	go func() {
 		var total int
-		for i:=0; i<10; i++ {
+		for i := 0; i < 10; i++ {
 			res, _ := cmdRun(shUp, debug)
 			byte1, _ := strconv.Atoi(strings.Trim(string(res), "\n\\n"))
 			time.Sleep(time.Millisecond * 20)
@@ -215,14 +215,13 @@ func calcNetworkRateByLoop(eth string, debug bool) (string, string) {
 			total += byteUpload
 		}
 
-		chU<-total
+		chU <- total
 	}()
 
 	download := <-chD
 	upload := <-chU
 
-
-	return calcByteAll(download/10*1000/20), calcByteAll(upload/10*1000/20)
+	return calcByteAll(download / 10 * 1000 / 20), calcByteAll(upload / 10 * 1000 / 20)
 }
 
 // 根据缓存时间计算网速
@@ -255,8 +254,8 @@ func calcNetworkRate(eth string, debug bool) (string, string) {
 		return "0", "0"
 	}
 
-	rateDownload := calcByteAll((download-cache.Download)/offset)
-	rateUpload := calcByteAll((upload-cache.Upload)/offset)
+	rateDownload := calcByteAll((download - cache.Download) / offset)
+	rateUpload := calcByteAll((upload - cache.Upload) / offset)
 
 	// cache it
 	cache.Download = download
@@ -267,8 +266,8 @@ func calcNetworkRate(eth string, debug bool) (string, string) {
 }
 
 func calcByteAll(data int) string {
-	gb := data / (1024*1024*1024)
-	mb := data / (1024*1024)
+	gb := data / (1024 * 1024 * 1024)
+	mb := data / (1024 * 1024)
 	kb := data / 1024
 
 	if gb >= 1 {
@@ -297,10 +296,10 @@ func getNetInfoDetail(num string, debug bool) []NetInfoDetail {
 		ni := strings.Fields(n)
 		if len(ni) >= 5 {
 			net = append(net, NetInfoDetail{
-				ID: ni[0],
-				State: ni[1],
-				R: ni[2],
-				S: ni[3],
+				ID:      ni[0],
+				State:   ni[1],
+				R:       ni[2],
+				S:       ni[3],
 				Address: ni[4],
 			})
 		}

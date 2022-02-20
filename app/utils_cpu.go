@@ -30,7 +30,7 @@ func getCPUInfo(debug bool) CPUInfo {
 	cpu_info := strings.Split(string(res), " ")
 
 	if e != nil || len(cpu_info) < 5 {
-		cpu.CpuUsage , cpu.CpuUsageSys , cpu.CpuUsageUser = "0", "0", "0"
+		cpu.CpuUsage, cpu.CpuUsageSys, cpu.CpuUsageUser = "0", "0", "0"
 		cpu.CpuFree, cpu.CpuIOWait = "0", "0"
 	} else {
 		// 替换使用top方式
@@ -69,7 +69,7 @@ func getCPUInfo(debug bool) CPUInfo {
 	res, e = cmdRun(sh, debug)
 	if e != nil {
 		cpu.CpuCount = "0"
-	}else {
+	} else {
 		cpu.CpuCount = strings.Trim(string(res), "\n")
 	}
 
@@ -87,7 +87,7 @@ func getCPUInfo(debug bool) CPUInfo {
 	res, e = cmdRun(sh, debug)
 	if e != nil {
 		cpu.CpuRun = "0"
-	}else {
+	} else {
 		cpu.CpuRun = strings.Trim(string(res), "\n")
 	}
 

@@ -17,11 +17,11 @@ import (
 func getContainers(api string) []Containers {
 	var containers []Containers
 	var cr []ContainersRaw
- 	url := fmt.Sprintf("%s/containers/json?all=true", api)
- 	res, e := Get(url)
- 	if e != nil {
- 		fmt.Printf("get containers failed: %v\n", e)
- 		return containers
+	url := fmt.Sprintf("%s/containers/json?all=true", api)
+	res, e := Get(url)
+	if e != nil {
+		fmt.Printf("get containers failed: %v\n", e)
+		return containers
 	}
 
 	_ = json.Unmarshal(res, &cr)

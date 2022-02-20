@@ -26,7 +26,7 @@ func getMemInfo(debug bool) MemInfo {
 	total, _ := strconv.Atoi(mem_info[1])
 	used, _ := strconv.Atoi(mem_info[0])
 
-	m.MemUsage = fmt.Sprintf("%.2f", float64(total) / float64(used) * 100)
+	m.MemUsage = fmt.Sprintf("%.2f", float64(total)/float64(used)*100)
 	m.MemUsed = mem_info[1] + "M"
 	m.MemCache = mem_info[2] + "M"
 	m.MemFree = mem_info[3] + "M"
